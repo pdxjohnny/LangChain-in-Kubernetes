@@ -2,8 +2,9 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter 
+import argparse
 
-DATA_PATH = 'Data/'
+DATA_PATH = args.folder
 DB_FAISS_PATH = 'vectorstore/db_faiss'  #Embedding created will go to 
 
 # Create vector database
@@ -26,5 +27,14 @@ def create_vector_db():
     db = FAISS.from_documents(texts, embeddings)
     db.save_local(DB_FAISS_PATH)
 
+# initialization of the script saving a parameter input by the user
+def main():
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='parser')
+    parser.add_argument('--folder', help='folder')
+    # Parse the command-line arguments
+    args = parser.parse_args()
+
     create_vector_db()
