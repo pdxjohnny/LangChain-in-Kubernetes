@@ -4,8 +4,13 @@ from langchain.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter 
 import argparse
 
+# Parse the command-line arguments
+parser = argparse.ArgumentParser(description='parser')
+parser.add_argument('--folder', help='folder')
+args = parser.parse_args()
+
 DATA_PATH = args.folder
-DB_FAISS_PATH = 'vectorstore/db_faiss'  #Embedding created will go to 
+DB_FAISS_PATH = 'vectorstore/db_faiss'
 
 # Create vector database
 def create_vector_db():
@@ -26,11 +31,7 @@ def create_vector_db():
 
     db = FAISS.from_documents(texts, embeddings)
     db.save_local(DB_FAISS_PATH)
+    print('Vector database created')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='parser')
-    parser.add_argument('--folder', help='folder')
-    # Parse the command-line arguments
-    args = parser.parse_args()
-
     create_vector_db()

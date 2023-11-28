@@ -13,8 +13,11 @@ COPY ingest.py ./
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+RUN echo "Building the Vector database with PDF documents..." && \
+    chmod +x ingest.py
+
 # Specify the command to run on container start
-CMD ["python", "ingest.py" -- folder /usr/app/src/Data ]
+CMD ["python","ingest.py", "--folder", "/usr/app/src/Data"]
 
 
 
