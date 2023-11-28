@@ -2,15 +2,7 @@
 transformers==4.29.0
 sentence_transformers==2.2.2
 torchvision==0.16.1
-#chroma-migrate==0.0.7
 torch==2.1.1
-#ipywidgets==8.1.1
-gradio==4.7.1
 langchain==0.0.229
 pypdf>=0
-faiss-cpu>=0
-chainlit>=0      #WHY NOT GRADIO
-ctransformers>=0 # WHY THIS?
-#pydantic==2.0.2
-#pydantic-core==2.1.2
-#pytest>=4.6
+faiss-cpu>=0     
