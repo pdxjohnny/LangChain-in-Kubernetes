@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='parser')
 parser.add_argument('--vector_folder', help='folder')
 args = parser.parse_args()
 
-DB_FAISS_PATH = 'args.vector_folder
+DB_FAISS_PATH = args.vector_folder
 
 #DB_FAISS_PATH = 'vectorstore/db_faiss'
 
@@ -51,7 +51,7 @@ def retrieval_qa_chain(llm, prompt, db):
                                        )
     return qa_chain
 
-#Loading the model
+#Loading the models
 #Using Hugging face hub
 def load_llm():
     HUGGINGFACEHUB_API_TOKEN = "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"
