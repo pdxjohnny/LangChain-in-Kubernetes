@@ -27,10 +27,6 @@ def create_vector_db():
     db = FAISS.from_documents(texts, embeddings)
     db.save_local(DB_FAISS_PATH)
 
-# initialization of the script saving a parameter input by the user
-def main():
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='parser')
     parser.add_argument('--folder', help='folder')

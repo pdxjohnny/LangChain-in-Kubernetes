@@ -1,15 +1,20 @@
-FROM python:3.11.2
+# Use the official Python image as a base image
+FROM python:3.8-slim
 
+# Set the working directory in the container
 WORKDIR /usr/app/src
 
-COPY Data/* /usr/app/src/Data 
-COPY requirements.txt /usr/app/src/
-COPY ingest.py /usr/app/src/
+# Copy the application files into the container
+COPY ./Data/ ./Data
+COPY requirements.txt ./
+COPY ingest.py ./
 
+# Upgrade pip and install dependencies
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
-RUN pwd
 
-# Create the Vector database
-CMD ["python","ingest.py --folder /usr/app/src/Data"]
+# Specify the command to run on container start
+CMD ["python", "ingest.py" -- folder /usr/app/src/Data ]
+
+
 
