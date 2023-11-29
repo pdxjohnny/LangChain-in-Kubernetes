@@ -12,17 +12,15 @@ COPY model.py ./
 
 # Upgrade pip and install dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
+    pip install -r requirements.txt
 
 RUN chmod +x ingest.py
 
 #Specify the command to run on container start
 
-CMD [ "python","ingest.py", "--folder", "/usr/app/src/Data"]
+CMD python ingest.py --folder /usr/app/src/Data  && chainlit run model.py
 
 RUN echo "Vectordatabase created"
-
-CMD [ "chainlit","run","model.py" ]
 
 
 
