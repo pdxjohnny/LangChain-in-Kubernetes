@@ -8,6 +8,7 @@ WORKDIR /usr/app/src
 COPY ./Data/ ./Data
 COPY requirements.txt ./
 COPY ingest.py ./
+COPY model.py ./
 
 # Upgrade pip and install dependencies
 RUN pip install --upgrade pip && \
@@ -18,6 +19,10 @@ RUN echo "Building the Vector database with PDF documents..." && \
 
 # Specify the command to run on container start
 CMD ["python","ingest.py", "--folder", "/usr/app/src/Data"]
+
+RUN echo "Vectordatabase created"
+
+CMD [ "chainlit","run","model.py","--vector_folder","/usr/app/src/Data" ]
 
 
 
