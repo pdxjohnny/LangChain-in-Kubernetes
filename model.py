@@ -4,22 +4,25 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.llms import CTransformers
 from langchain.llms import HuggingFaceHub
+from langchain.llms import HuggingFacePipeline
 from getpass import getpass
 from langchain.chains import RetrievalQA
 import chainlit as cl
 import os
-import argsparse
+import argparse
 from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
 
 # Parse the command-line arguments
-parser = argparse.ArgumentParser(description='parser')
-parser.add_argument('--vector_folder', help='folder')
-args = parser.parse_args()
+#parser = argparse.ArgumentParser(description='parser')
+#parser.add_argument('--vector_folder', help='folder')
+#args = parser.parse_args()
 
-DB_FAISS_PATH = args.vector_folder
+#DB_FAISS_PATH = args.vector_folder
 
-#DB_FAISS_PATH = 'vectorstore/db_faiss'
+
+DB_FAISS_PATH = 'vectorstore/db_faiss'
 
 #Define the custom prompt for 
 custom_prompt_template = """Use the following pieces of information to answer the user's question.
@@ -82,7 +85,7 @@ def local_llm():
                          trust_remote_code=True, max_new_tokens=100, 
                          repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
     # LangChain HuggingFacePipeline set to our transformer pipeline
-    llm = print("model Downloaded")
+    llm = HuggingFacePipeline(pipeline=pipe)
     return llm
 
 
@@ -105,8 +108,11 @@ def qa_bot():
                                        model_kwargs={'device': 'cpu'})
     
     db = FAISS.load_local(DB_FAISS_PATH, embeddings)
+    
     llm = local_llm()
+    
     qa_prompt = set_custom_prompt()
+    
     qa = retrieval_qa_chain(llm, qa_prompt, db)
 
     return qa
@@ -116,6 +122,7 @@ def final_result(query):
     qa_result = qa_bot()
     response = qa_result({'query': query})
     return response
+
 ####################################################
 #chainlit code
 @cl.on_chat_start
