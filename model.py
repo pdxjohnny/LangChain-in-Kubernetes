@@ -20,8 +20,6 @@ import torch
 #args = parser.parse_args()
 
 #DB_FAISS_PATH = args.vector_folder
-
-
 DB_FAISS_PATH = 'vectorstore/db_faiss'
 
 #Define the custom prompt for 
