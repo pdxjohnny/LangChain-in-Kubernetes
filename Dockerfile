@@ -20,6 +20,7 @@ RUN chmod +x ingest.py
 
 CMD python ingest.py --folder /usr/app/src/Data  && chainlit run model.py
 
+EXPOSE 8000
 RUN echo "Vectordatabase created"
 
 
