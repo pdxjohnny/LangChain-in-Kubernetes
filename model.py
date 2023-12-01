@@ -20,9 +20,9 @@ import torch
 #args = parser.parse_args()
 
 #DB_FAISS_PATH = args.vector_folder
-#DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
+DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
 
-DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
+#DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
 
 #Define the custom prompt for 
 custom_prompt_template = """Use the following pieces of information to answer the user's question.
