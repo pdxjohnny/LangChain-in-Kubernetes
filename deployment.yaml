@@ -1,20 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Pod
 metadata:
   name: chat-bot
 spec:
-  replicas: 1  # Specify the desired number of replicas
-  selector:
-    matchLabels:
-      app: chat-bot
-  template:
-    metadata:
-      labels:
-        app: chat-bot
-    spec:
-      containers:
-      - name: chat-bot
-        # The $REPOSITORY_URI and $IMAGE_TAG placeholders will be replaced by actual values supplied by the build action in your workflow
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/langchain_demo:latest
-        ports :
-        - containerPort : 8000
+  containers:
+  - name: chat-bot
+  # The $REPOSITORY_URI and $IMAGE_TAG placeholders will be replaced by actual values supplied by the build action in your workflow
+    image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/langchain_demo:latest
+    ports :
+    - containerPort : 8000

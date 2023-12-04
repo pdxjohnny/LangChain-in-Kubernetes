@@ -21,6 +21,7 @@ import torch
 
 #DB_FAISS_PATH = args.vector_folder
 DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
+DB_FAISS_PATH = '/home/ec2-user/LangChain-in-Kubernetes/vectorstore'
 
 #DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
 
