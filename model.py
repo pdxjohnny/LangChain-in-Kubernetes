@@ -13,7 +13,47 @@ import argparse
 from transformers import pipeline
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
+from fastapi import FastAPI, HTTPException, Request
+######################
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
+class Data(BaseModel):
+    field: str
+
+app = FastAPI()
+# Allow requests from your React application's origin
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Add the origin of your React app
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Your POST endpoint
+@app.post("/ws")
+async def process_text_data(request: Request):
+    try:
+        # Get the raw bytes from the request body
+        raw_data = await request.body()
+        
+        # Decode the raw bytes into a string
+        text_data = raw_data.decode("utf-8")
+
+        print("Received Data:", text_data)  # Add this line for logging
+
+        # Replace this with your actual processing logic
+        processed_data = text_data.upper()
+
+        print(processed_data)  # Add this line for logging
+
+        return {processed_data}
+    except Exception as e:
+        print("Error:", str(e))  # Add this line for logging
+        raise HTTPException(status_code=500, detail=str(e))
+
+#########################
 # Parse the command-line arguments
 #parser = argparse.ArgumentParser(description='parser')
 #parser.add_argument('--vector_folder', help='folder')
@@ -24,6 +64,7 @@ DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
 DB_FAISS_PATH = '/home/ec2-user/LangChain-in-Kubernetes/vectorstore'
 
 #DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
+
 
 #Define the custom prompt for 
 custom_prompt_template = """Use the following pieces of information to answer the user's question.
