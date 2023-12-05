@@ -6,14 +6,15 @@ class ActionProvider {
   
     greet = () => {
       const message = this.createChatBotMessage("Hello friend.");
-      //this.addMessageToState(message);
+      this.addMessageToState(message);
     };
   
     chatToPython = async (message) => {
       try {
         const sendMessageToAPI = async (message) => {
           try {
-            const response = await fetch('http://ec2-54-221-63-234.compute-1.amazonaws.com:5000/ws', {
+            console.log('Trying to connect');
+            const response = await fetch('http://localhost:8000/ws', {
               method: 'POST',
               headers: {
                 'Content-Type': 'text/plain', // Set the appropriate Content-Type

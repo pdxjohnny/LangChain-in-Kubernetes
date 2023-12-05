@@ -46,9 +46,11 @@ async def process_text_data(request: Request):
         # Replace this with your actual processing logic
         processed_data = text_data.upper()
 
-        print(processed_data)  # Add this line for logging
+        answer_from_model = final_result(text_data)
 
-        return {processed_data}
+        print(answer_from_model)  # Add this line for logging
+
+        return (answer_from_model['result'])
     except Exception as e:
         print("Error:", str(e))  # Add this line for logging
         raise HTTPException(status_code=500, detail=str(e))
@@ -60,8 +62,9 @@ async def process_text_data(request: Request):
 #args = parser.parse_args()
 
 #DB_FAISS_PATH = args.vector_folder
-DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
-DB_FAISS_PATH = '/home/ec2-user/LangChain-in-Kubernetes/vectorstore'
+#DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
+DB_FAISS_PATH = '/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss'
+
 
 #DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
 
@@ -127,8 +130,12 @@ def local_llm():
                          trust_remote_code=True, max_new_tokens=100, 
                          repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
     # LangChain HuggingFacePipeline set to our transformer pipeline
-    llm = HuggingFacePipeline(pipeline=pipe)
-    return llm
+    llm_local_pipeline = HuggingFacePipeline(pipeline=pipe)
+
+    pipeline_path= "/home/ec2-user/LangChain-in-Kubernetes/Data/Pipeline"
+    pipe.save_pretrained(pipeline_path)
+
+    return llm_local_pipeline
 
 
 # Loading the model locally 
