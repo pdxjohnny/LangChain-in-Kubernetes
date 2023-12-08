@@ -17,6 +17,7 @@ from fastapi import FastAPI, HTTPException, Request
 ######################
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import uvicorn
 
 class Data(BaseModel):
     field: str
@@ -43,9 +44,6 @@ async def process_text_data(request: Request):
 
         print("Received Data:", text_data)  # Add this line for logging
 
-        # Replace this with your actual processing logic
-        processed_data = text_data.upper()
-
         answer_from_model = final_result(text_data)
 
         print(answer_from_model)  # Add this line for logging
@@ -63,14 +61,14 @@ async def process_text_data(request: Request):
 
 #DB_FAISS_PATH = args.vector_folder
 #DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
-DB_FAISS_PATH = '/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss'
+DB_FAISS_PATH = '/Users/emlanza/Library/CloudStorage/OneDrive-IntelCorporation/Technical/S2E/Events/Kubecon EU 2024/LangChain-in-Kubernetes/vectorstore/db_faiss'
 
 
 #DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
 
 
 #Define the custom prompt for 
-custom_prompt_template = """Use the following pieces of information to answer the user's question.
+custom_prompt_template = """Use the following pieces of information to answer the user's question. Explaining the answer
 If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 Context: {context}
@@ -79,6 +77,64 @@ Question: {question}
 Only return the helpful answer below and nothing else.
 Helpful answer:
 """
+class chain():
+    def __init__(self,DB_FAISS_PATH):
+        self.llm_pipeline = None
+        self.qa = None
+        self.qa_prompt = None
+        self.promp = None
+        self.faiss_db =None
+        
+        self.load_model()
+        self.qa_bot(DB_FAISS_PATH)
+        self.retrieval_qa_chain()
+
+    def load_model(self):
+
+        #Set model
+        model = "tiiuae/falcon-7b-instruct"
+
+        # Load tokenizer
+        tokenizer = AutoTokenizer.from_pretrained(model)
+
+        # Load model
+        model = AutoModelForCausalLM.from_pretrained(
+            model,
+                trust_remote_code=True,
+            )
+        # Set to eval mode
+        model.eval()
+
+        # Create a pipline
+        self.llm_pipeline = pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
+                         trust_remote_code=True, max_new_tokens=100, 
+                         repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
+
+    def retrieval_qa_chain(self):
+        self.qa_chain = RetrievalQA.from_chain_type(llm=self.llm_pipeline,
+                                       chain_type='stuff',
+                                       retriever=self.faiss_db.as_retriever(search_kwargs={'k': 3}),
+                                       return_source_documents=True,
+                                       chain_type_kwargs={'prompt': self.prompt}
+                                       )
+    
+    def qa_bot(self,DB_FAISS_PATH ):
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
+                                       model_kwargs={'device': 'cpu'})
+        
+        self.faiss_db  = FAISS.load_local(DB_FAISS_PATH, embeddings)
+    
+        self.qa_prompt = set_custom_prompt()
+    
+    def inference(self,text_input):
+        qa = retrieval_qa_chain(self.llm_pipeline, self.qa_prompt, db)
+        response = qa({'query': text_input})
+        
+        return response
+
+test = chain(DB_FAISS_PATH)
+result = test.inference("Tell me about kubernetes")
+print(result)
 
 def set_custom_prompt():
     """
@@ -97,6 +153,7 @@ def retrieval_qa_chain(llm, prompt, db):
                                        return_source_documents=True,
                                        chain_type_kwargs={'prompt': prompt}
                                        )
+    print("chain retrieved")
     return qa_chain
 
 #Loading the models
@@ -114,26 +171,42 @@ def load_llm():
     return llm
 
 def local_llm():
-    #Set model
-    model = "tiiuae/falcon-7b-instruct"
-    # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model)
-    # Load model
-    model = AutoModelForCausalLM.from_pretrained(
-        model,
-        trust_remote_code=True,
-        )
-    # Set to eval mode
-    model.eval()
-    # Create a pipline
-    pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
+    pipeline_path= "/home/ec2-user/LangChain-in-Kubernetes/Data/Pipeline"
+
+    try:
+        if os.path.exists(pipeline_path):
+            model = AutoModelForCausalLM.from_pretrained(
+                pipeline_path,
+                    trust_remote_code=True,
+                )
+            model.eval()
+
+            tokenizer = AutoTokenizer.from_pretrained(pipeline_path)
+            pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
                          trust_remote_code=True, max_new_tokens=100, 
                          repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
-    # LangChain HuggingFacePipeline set to our transformer pipeline
-    llm_local_pipeline = HuggingFacePipeline(pipeline=pipe)
+        else:
+        #Set model
+            model = "tiiuae/falcon-7b-instruct"
+            # Load tokenizer
+            tokenizer = AutoTokenizer.from_pretrained(model)
+        # Load model
+            model = AutoModelForCausalLM.from_pretrained(
+                model,
+                    trust_remote_code=True,
+                )
+        # Set to eval mode
+            model.eval()
+        # Create a pipline
+            pipe = pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
+                         trust_remote_code=True, max_new_tokens=100, 
+                         repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
+            pipe.save_pretrained(pipeline_path)
 
-    pipeline_path= "/home/ec2-user/LangChain-in-Kubernetes/Data/Pipeline"
-    pipe.save_pretrained(pipeline_path)
+    # LangChain HuggingFacePipeline set to our transformer pipeline
+    except:
+        pass
+    llm_local_pipeline = HuggingFacePipeline(pipeline=pipe)
 
     return llm_local_pipeline
 
@@ -153,27 +226,50 @@ def local_llm():
 
 #QA Model Function
 def qa_bot():
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
-                                       model_kwargs={'device': 'cpu'})
     
+    local_model_path = "/home/ec2-user/LangChain-in-Kubernetes/Data/embeddings"
+    
+    if os.path.exists(local_model_path):
+        embeddings = HuggingFaceEmbeddings(model_name=local_model_path,model_kwargs={'device': 'cpu'})
+
+    else:
+        embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
+                                       model_kwargs={'device': 'cpu'})
+        
+        #embeddings.save_pretrained(local_model_path)
+    
+    print("here")
     db = FAISS.load_local(DB_FAISS_PATH, embeddings)
     
+    print("db loaded")
+    
     llm = local_llm()
+    print("llm loaded")
     
     qa_prompt = set_custom_prompt()
     
-    qa = retrieval_qa_chain(llm, qa_prompt, db)
+    #qa = retrieval_qa_chain(llm, qa_prompt, db)
 
-    return qa
+    return llm, qa_prompt, db
 
 #output function
 def final_result(query):
-    qa_result = qa_bot()
-    response = qa_result({'query': query})
+    #qa_result = qa_bot()
+    qa = retrieval_qa_chain(llm, qa_prompt, db)
+    response = qa({'query': query})
     return response
 
+if __name__ == "__main__":
+    test = chain()
+    result = test.inference("Tell me about kubernetes")
+    print(result)
+    #Initiate model class to have chain loaded in memory 
+    #llm, qa_prompt, db = qa_bot()
+    #uvicorn.run(app, host="localhost", port=8000)
+    
+
 ####################################################
-#chainlit code
+""" #chainlit code
 @cl.on_chat_start
 async def start():
     chain = qa_bot()
@@ -200,4 +296,4 @@ async def main(message: cl.Message):
     else:
         answer += "\nNo sources found"
 
-    await cl.Message(content=answer).send()
+    await cl.Message(content=answer).send() """
