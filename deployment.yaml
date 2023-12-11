@@ -1,11 +1,19 @@
 apiVersion: apps/v1
-kind: Pod
+kind: Deployment
 metadata:
-  name: chat-bot
+  name: chat-deployment
 spec:
-  containers:
-  - name: chat-bot
-  # The $REPOSITORY_URI and $IMAGE_TAG placeholders will be replaced by actual values supplied by the build action in your workflow
-    image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/langchain_demo:latest
-    ports :
-    - containerPort : 8000
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      containers:
+        - name: chat
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:0.1
+          ports:
+            - containerPort: 8000

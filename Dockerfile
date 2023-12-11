@@ -18,7 +18,7 @@ RUN chmod +x ingest.py
 
 #Specify the command to run on container start
 
-CMD python ingest.py --folder /usr/app/src/Data  && chainlit run model.py
+CMD python ingest.py --folder /usr/app/src/Data  && python model.py
 
 EXPOSE 8000
 RUN echo "Vectordatabase created"

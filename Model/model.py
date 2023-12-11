@@ -60,8 +60,8 @@ async def process_text_data(request: Request):
 #args = parser.parse_args()
 
 #DB_FAISS_PATH = args.vector_folder
-DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
-#DB_FAISS_PATH = '/Users/emlanza/Library/CloudStorage/OneDrive-IntelCorporation/Technical/S2E/Events/Kubecon EU 2024/LangChain-in-Kubernetes/vectorstore/db_faiss'
+#DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
+DB_FAISS_PATH = '/Users/emlanza/Library/CloudStorage/OneDrive-IntelCorporation/Technical/S2E/Events/Kubecon EU 2024/LangChain-in-Kubernetes/vectorstore/db_faiss'
 
 
 #DB_FAISS_PATH = "/home/ec2-user/LangChain-in-Kubernetes/vectorstore/db_faiss"
@@ -88,15 +88,15 @@ class chain():
         self.load_model()
         self.qa_bot(DB_FAISS_PATH)
         self.retrieval_qa_chain()
+        self.custom_prompt_template = """Use the following pieces of information to answer the user's question. Explaining the answer
+            If you don't know the answer, just say that you don't know, don't try to make up an answer.
+            Context: {context}
+            Question: {question}
 
-    def set_custom_prompt():
-        """
-        Prompt template for QA retrieval for each vectorstore
-        """
-        prompt = PromptTemplate(template=custom_prompt_template,
-                            input_variables=['context', 'question'])
-        return prompt
-    
+            Only return the helpful answer below and nothing else.
+            Helpful answer: 
+            """
+
     def load_model(self):
 
         #Set model
@@ -139,6 +139,15 @@ class chain():
         response = qa({'query': text_input})
         
         return response
+    
+    def set_custom_prompt(self):
+        """
+        Prompt template for QA retrieval for each vectorstore
+        """
+    
+        prompt = PromptTemplate(template=self.custom_prompt_template,
+                            input_variables=['context', 'question'])
+        return prompt
 
 test = chain(DB_FAISS_PATH)
 result = test.inference("Tell me about kubernetes")
