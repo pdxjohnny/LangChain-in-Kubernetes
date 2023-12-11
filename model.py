@@ -84,18 +84,18 @@ class chain():
         self.qa_prompt = None
         self.promp = None
         self.faiss_db =None
-        
+        self.custom_prompt_template = """Use the following pieces of information to answer the user's question. Explaining the answer
+            If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+            Context: {context}
+            Question: {question}
+
+            Only return the helpful answer below and nothing else.
+            Helpful answer:
+            """
         self.load_model()
         self.qa_bot(DB_FAISS_PATH)
         self.retrieval_qa_chain()
-
-    def set_custom_prompt():
-        """
-        Prompt template for QA retrieval for each vectorstore
-        """
-        prompt = PromptTemplate(template=custom_prompt_template,
-                            input_variables=['context', 'question'])
-        return prompt
     
     def load_model(self):
 
@@ -131,8 +131,11 @@ class chain():
                                        model_kwargs={'device': 'cpu'})
         
         self.faiss_db  = FAISS.load_local(DB_FAISS_PATH, embeddings)
-    
-        self.qa_prompt = set_custom_prompt()
+        
+        prompt = PromptTemplate(template=self.custom_prompt_template,
+                            input_variables=['context', 'question'])
+        
+        self.qa_prompt = prompt
     
     def inference(self,text_input):
         qa = retrieval_qa_chain(self.llm_pipeline, self.qa_prompt, self.faiss_db)
