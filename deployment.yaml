@@ -1,19 +1,67 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chat-deployment
+  name: chat-backend-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chat
+      app: chat-backend
   template:
     metadata:
       labels:
-        app: chat
+        app: chat-backend
     spec:
       containers:
-        - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:0.4
-          ports:
-            - containerPort: 8000
+      - name: chat-backend
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:0.10
+        ports:
+        - containerPort: 8000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-backend-service
+spec:
+  selector:
+    app: chat-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-frontend
+  template:
+    metadata:
+      labels:
+        app: react-frontend
+    spec:
+      containers:
+      - name: react-frontend
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:0.1
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-frontend-service
+spec:
+  selector:
+    app: react-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+

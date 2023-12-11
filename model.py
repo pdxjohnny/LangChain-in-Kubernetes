@@ -44,9 +44,11 @@ async def process_text_data(request: Request):
 
         print("Received Data:", text_data)  # Add this line for logging
 
-        answer_from_model = final_result(text_data)
+        #Send text to be inferenced
+        answer_from_model = test.inference(text_data)
+        #answer_from_model = final_result(text_data)
 
-        print(answer_from_model)  # Add this line for logging
+        #print(answer_from_model)  # Add this line for logging
 
         return (answer_from_model['result'])
     except Exception as e:
@@ -82,7 +84,7 @@ class chain():
         self.llm_pipeline = None
         self.qa = None
         self.qa_prompt = None
-        self.promp = None
+        self.prompt = None
         self.faiss_db =None
         self.custom_prompt_template = """Use the following pieces of information to answer the user's question. Explaining the answer
             If you don't know the answer, just say that you don't know, don't try to make up an answer.
@@ -114,16 +116,18 @@ class chain():
         model.eval()
 
         # Create a pipline
-        self.llm_pipeline = pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
+        pipe= pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
                          trust_remote_code=True, max_new_tokens=100, 
                          repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
+        
+        self.llm_pipeline = HuggingFacePipeline(pipeline=pipe)
 
     def retrieval_qa_chain(self):
         self.qa_chain = RetrievalQA.from_chain_type(llm=self.llm_pipeline,
                                        chain_type='stuff',
                                        retriever=self.faiss_db.as_retriever(search_kwargs={'k': 3}),
                                        return_source_documents=True,
-                                       chain_type_kwargs={'prompt': self.prompt}
+                                       chain_type_kwargs={'prompt': self.qa_prompt}
                                        )
     
     def qa_bot(self,DB_FAISS_PATH ):
@@ -143,9 +147,9 @@ class chain():
         
         return response
 
-test = chain(DB_FAISS_PATH)
-result = test.inference("Tell me about kubernetes")
-print(result)
+#test = chain(DB_FAISS_PATH)
+#result = test.inference("Tell me about kubernetes")
+#print(result)
 
 def set_custom_prompt():
     """
@@ -271,9 +275,16 @@ def final_result(query):
     return response
 
 if __name__ == "__main__":
-    test = chain()
-    result = test.inference("Tell me about kubernetes")
-    print(result)
+    #Initiate class
+    test = chain(DB_FAISS_PATH)
+    
+    #Start API
+    uvicorn.run(app, host="localhost", port=8000)
+    #
+    #result = test.inference("Tell me about kubernetes")
+    
+    #print(result)
+    
     #Initiate model class to have chain loaded in memory 
     #llm, qa_prompt, db = qa_bot()
     #uvicorn.run(app, host="localhost", port=8000)
