@@ -14,7 +14,7 @@ class ActionProvider {
         const sendMessageToAPI = async (message) => {
           try {
             console.log('Trying to connect');
-            const response = await fetch('http://localhost:8000/ws', {
+            const response = await fetch('http://chat-backend-service:80/ws', {
               method: 'POST',
               headers: {
                 'Content-Type': 'text/plain', // Set the appropriate Content-Type

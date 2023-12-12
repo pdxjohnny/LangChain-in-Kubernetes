@@ -275,9 +275,12 @@ def final_result(query):
     return response
 
 if __name__ == "__main__":
+ 
+
     #Initiate class
     test = chain(DB_FAISS_PATH)
-    
+    #Start
+    app = FastAPI()
     #Start API
     uvicorn.run(app, host="localhost", port=8000)
     #
