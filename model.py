@@ -7,14 +7,11 @@ from langchain.llms import HuggingFaceHub
 from langchain.llms import HuggingFacePipeline
 from getpass import getpass
 from langchain.chains import RetrievalQA
-import chainlit as cl
 import os
-import argparse
 from transformers import pipeline
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
 from fastapi import FastAPI, HTTPException, Request
-######################
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
@@ -62,7 +59,7 @@ async def process_text_data(request: Request):
 #args = parser.parse_args()
 
 #DB_FAISS_PATH = args.vector_folder
-DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
+#DB_FAISS_PATH = '/usr/app/src/vectorstore/db_faiss'
 #DB_FAISS_PATH = '/Users/emlanza/Library/CloudStorage/OneDrive-IntelCorporation/Technical/S2E/Events/Kubecon EU 2024/LangChain-in-Kubernetes/vectorstore/db_faiss'
 
 
@@ -293,32 +290,32 @@ if __name__ == "__main__":
     #uvicorn.run(app, host="localhost", port=8000)
     
 
-####################################################
-""" #chainlit code
-@cl.on_chat_start
-async def start():
-    chain = qa_bot()
-    msg = cl.Message(content="Starting the bot...")
-    await msg.send()
-    msg.content = "Hi, Welcome to Medical Bot. What is your query?"
-    await msg.update()
+# """ ####################################################
+# """ #chainlit code
+# @cl.on_chat_start
+# async def start():
+#     chain = qa_bot()
+#     msg = cl.Message(content="Starting the bot...")
+#     await msg.send()
+#     msg.content = "Hi, Welcome to Medical Bot. What is your query?"
+#     await msg.update()
 
-    cl.user_session.set("chain", chain)
+#     cl.user_session.set("chain", chain)
 
-@cl.on_message
-async def main(message: cl.Message):
-    chain = cl.user_session.get("chain") 
-    cb = cl.AsyncLangchainCallbackHandler(
-        stream_final_answer=True, answer_prefix_tokens=["FINAL", "ANSWER"]
-    )
-    cb.answer_reached = True
-    res = await chain.acall(message.content, callbacks=[cb])
-    answer = res["result"]
-    sources = res["source_documents"]
+# @cl.on_message
+# async def main(message: cl.Message):
+#     chain = cl.user_session.get("chain") 
+#     cb = cl.AsyncLangchainCallbackHandler(
+#         stream_final_answer=True, answer_prefix_tokens=["FINAL", "ANSWER"]
+#     )
+#     cb.answer_reached = True
+#     res = await chain.acall(message.content, callbacks=[cb])
+#     answer = res["result"]
+#     sources = res["source_documents"]
 
-    if sources:
-        answer += f"\nSources:" + str(sources)
-    else:
-        answer += "\nNo sources found"
+#     if sources:
+#         answer += f"\nSources:" + str(sources)
+#     else:
+#         answer += "\nNo sources found"
 
-    await cl.Message(content=answer).send() """
+#     await cl.Message(content=answer).send() """ """

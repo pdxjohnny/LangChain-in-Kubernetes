@@ -13,15 +13,16 @@ class ActionProvider {
       try {
         const sendMessageToAPI = async (message) => {
           try {
+            console.log('Backend URL:', process.env.BACKEND_URL);
             console.log('Trying to connect');
-            const response = await fetch('http://chat-backend-service:80/ws', {
+            const response = await fetch('http://localhost:8000/ws', {
               method: 'POST',
               headers: {
                 'Content-Type': 'text/plain', // Set the appropriate Content-Type
               },
-              body:(message), // Format the body as JSON
+              body: message, // Send as JSON
             });
-  
+              
             if (!response.ok) {
               throw new Error('Failed to send message to the API');
             }

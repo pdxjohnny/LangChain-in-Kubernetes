@@ -15,12 +15,11 @@ spec:
       containers:
       - name: chat-backend
       # COMPLETE WITH THE ADDRESS OF YOUR REPOSITORY ON ECR
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:0.16
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat_v2:0.14
         ports:
+        - name: http
         - containerPort: 8000
-        command: ["sh", "-c"]
-        args:
-          - "python ingest.py --folder /usr/app/src/Data && uvicorn model:app --reload"
+
 ---
 apiVersion: v1
 kind: Service
@@ -29,10 +28,11 @@ metadata:
 spec:
   selector:
     app: chat-backend
+    tier: backend
   ports:
     - protocol: TCP
       port: 8000
-      targetPort: 8000
+      targetPort: http
 
 ---
 apiVersion: apps/v1
@@ -51,9 +51,12 @@ spec:
     spec:
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:0.6
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:0.13
         ports:
         - containerPort: 3000
+        env:
+        - name: BACKEND_URL
+          value: "http://chat-backend-service:8000"
 
 ---
 apiVersion: v1

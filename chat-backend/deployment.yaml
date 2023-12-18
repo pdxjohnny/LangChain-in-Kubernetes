@@ -6,21 +6,23 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chat-backend
+      app: chat
+      tier: backend
+      track: stable
   template:
     metadata:
       labels:
-        app: chat-backend
+        app: chat
+        tier: backend
+        track: stable
     spec:
       containers:
-      - name: chat-backend
-      # COMPLETE WITH THE ADDRESS OF YOUR REPOSITORY ON ECR
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:0.16
-        ports:
-        - containerPort: 8000
-        command: ["sh", "-c"]
-        args:
-          - "python ingest.py --folder /usr/app/src/Data && uvicorn model:app --reload"
+        - name: chat
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat_v2:0.14
+          ports:
+            - name: http
+              containerPort: 8000
+
 ---
 apiVersion: v1
 kind: Service
@@ -28,43 +30,50 @@ metadata:
   name: chat-backend-service
 spec:
   selector:
-    app: chat-backend
+    app: chat
+    tier: backend
   ports:
     - protocol: TCP
       port: 8000
-      targetPort: 8000
+      targetPort: http
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: react-frontend-deployment
+  name: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: react-frontend
+      app: chat
+      tier: frontend
   template:
     metadata:
       labels:
-        app: react-frontend
+        app: chat
+        tier: frontend
     spec:
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:0.6
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:0.17
         ports:
         - containerPort: 3000
+        env:
+        - name: BACKEND_URL
+          value: "http://chat-backend-service:8000"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: react-frontend-service
+  name: frontend
 spec:
   selector:
-    app: react-frontend
+    app: chat
+    tier: frontend
   ports:
-    - protocol: TCP
+    - protocol: "TCP"
       port: 80
       targetPort: 3000
 
@@ -72,10 +81,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: front-end-service
+  name: frontend
 spec:
   selector:
-    app: react-frontend
+    app: chat
+    tier: frontend
   ports:
     - protocol: TCP
       port: 80

@@ -18,8 +18,7 @@ RUN chmod +x ingest.py
 
 #Specify the command to run on container start
 
-CMD python ingest.py --folder /usr/app/src/Data  && python model.py
-
+CMD sh -c "python ingest.py --folder /usr/app/src/Data  && uvicorn /usr/app/src/model.py:app --reload"
 EXPOSE 8000
 RUN echo "Vectordatabase created"
 
