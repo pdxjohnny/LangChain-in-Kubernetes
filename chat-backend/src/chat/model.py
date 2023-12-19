@@ -32,13 +32,15 @@ class chain():
             Context: {context}
             Question: {question}
 
-            Only return the helpful answer below and nothing else.
+            Only return the helpful answer below and nothing else. Make your answer concise and it wouldn't take more than 1000 characters.
             Helpful answer:
             """
         print("Starting the model")
         self.load_model()
+        
         print("Starting bot")
         self.qa_bot(DB_FAISS_PATH)
+        
         print("Starting the chain")
         self.retrieval_qa_chain()
     
@@ -57,7 +59,6 @@ class chain():
             )
         # Set to eval mode
         model.eval()
-
         # Create a pipline
         pipe= pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
                          trust_remote_code=True, max_new_tokens=100, 
@@ -82,12 +83,11 @@ class chain():
         prompt = PromptTemplate(template=self.custom_prompt_template,
                             input_variables=['context', 'question'])
         
-
-        
         self.qa_prompt = prompt
     
     def inference(self,text_input):
-        qa = self.retrieval_qa_chain(self.llm_pipeline, self.qa_prompt, self.faiss_db)
-        response = qa({'query': text_input})
+        # Bulild the Prompt
+
+        response = self.qa_chain({'query': text_input})
         
         return response

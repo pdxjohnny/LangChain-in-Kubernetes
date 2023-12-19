@@ -18,9 +18,9 @@ class ActionProvider {
             const response = await fetch('http://localhost:8000/ws', {
               method: 'POST',
               headers: {
-                'Content-Type': 'text/plain', // Set the appropriate Content-Type
+                'Content-Type': 'text/plain' // Set the appropriate Content-Type
               },
-              body: message, // Send as JSON
+              body: message,
             });
               
             if (!response.ok) {
