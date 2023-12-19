@@ -1,5 +1,0 @@
-FROM npm
-
-npm add react-chatbot-kit
-npm install server
-npm install axios
