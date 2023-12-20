@@ -13,9 +13,9 @@ class ActionProvider {
       try {
         const sendMessageToAPI = async (message) => {
           try {
-            console.log('Backend URL:', process.env.BACKEND_URL);
+            console.log('Backend URL:', process.env.REACT_APP_BACKEND_URL);
             console.log('Trying to connect');
-            const response = await fetch('http://localhost:8000/ws', {
+            const response = await fetch('http://127.0.0.1:8000/ws', {
               method: 'POST',
               headers: {
                 'Content-Type': 'text/plain' // Set the appropriate Content-Type

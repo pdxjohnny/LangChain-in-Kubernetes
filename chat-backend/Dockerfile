@@ -14,6 +14,8 @@ COPY ./src ./src/
 COPY ./src/main.py ./main.py
 COPY ./src/app/app.py ./app.py
 
+
+
 # Set a default port as an environment variable
 ENV PORT=8000
 

@@ -35,7 +35,7 @@ spec:
   ports:
     - protocol: TCP
       port: 8000
-      targetPort: http
+      targetPort: 8000
 
 ---
 apiVersion: apps/v1
@@ -56,12 +56,9 @@ spec:
     spec:
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.1
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.8
         ports:
         - containerPort: 3000
-        env:
-        - name: BACKEND_URL
-          value: "http://chat-backend-service:8000"
 
 ---
 apiVersion: v1
