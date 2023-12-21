@@ -22,6 +22,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position:relative;
 }
 
 .react-chatbot-kit-user-avatar-icon {
@@ -90,7 +91,7 @@
   color: #fff;
   font-weight: medium;
   position: relative;
-  width: 184.5px;
+  width: auto;
   margin-left: auto;
   text-align: left;
 }
@@ -145,7 +146,8 @@
 
 .react-chatbot-kit-chat-container {
   position: relative;
-  width: 275px;
+  width: 575px;
+  margin: 0 auto;
 }
 
 .react-chatbot-kit-chat-inner-container {

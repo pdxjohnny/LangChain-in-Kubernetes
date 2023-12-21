@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:latest
+        # Add the address to your container repository
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:1.0
           ports:
             - name: http
               containerPort: 8000

@@ -12,6 +12,13 @@ In these demos, you will explore how RAG ( Retrieval-Augmented Generation ) can 
 
 # 1. Create FRONT_END and BACK_END containers
 
-There are two folders with all the 
+Go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
+
+RUN
+```{python}
+    cd front_end
+    docker build --platform linux/amd64 -t chat:latest .
+```
+
 
 # Deploy it on Kubernetes
