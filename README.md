@@ -14,11 +14,19 @@ In these demos, you will explore how RAG ( Retrieval-Augmented Generation ) can 
 
 Go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
 
-RUN
+Create REACT front end container
 ```{python}
     cd front_end
+    docker build --platform linux/amd64 -t front_end:latest .
+```
+Create Python Back end container
+```{python}
+    cd chat-backend
     docker build --platform linux/amd64 -t chat:latest .
 ```
-
+# OPTIONAL If you have AWS ECR
 
 # Deploy it on Kubernetes
+
+
+
