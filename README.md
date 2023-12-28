@@ -39,6 +39,24 @@ This command will start both containers at each port. Front end will be using po
 
 You should now be able to see the chatbot interface on http://localhost:3000
 
+
+# Optimization step
+The front end can interact with both optimized and non-optimzed models. You can find in the folder chat-backend Optimized the model already optimized.
+
+This is the step by step if you want to know how we did it: 
+
+    1. Clone Intel neural compressor 
+    ```{python}
+    git clone https://github.com/intel/neural-compressor.git
+    ```
+
+    2. Go to the folder to perform the quantization
+    ```{python}
+    cd neural-compressor/examples/pytorch/nlp/huggingface_models/language-modeling/quantization/llm
+    ```
+
+    
+
 # OPTIONAL If you have AWS ECR
 
 # Deploy it on Kubernetes
