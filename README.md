@@ -47,15 +47,15 @@ This is the step by step if you want to know how we did it:
 
     1. Clone Intel neural compressor 
     ```{python}
-    git clone https://github.com/intel/neural-compressor.git
+        git clone https://github.com/intel/neural-compressor.git
     ```
 
     2. Go to the folder to perform the quantization
     ```{python}
-    cd neural-compressor/examples/pytorch/nlp/huggingface_models/language-modeling/quantization/llm
+        cd neural-compressor/examples/pytorch/nlp/huggingface_models/language-modeling/quantization/llm
     ```
 
-    
+
 
 # OPTIONAL If you have AWS ECR
 
