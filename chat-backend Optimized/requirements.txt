@@ -1,0 +1,13 @@
+#chromadb==0.4.2
+transformers==4.29.0
+sentence_transformers==2.2.2
+torchvision==0.16.1
+torch==2.1.1
+langchain==0.0.229
+pypdf>=0
+faiss-cpu>=0     
+chainlit == 0.7.700
+fastapi>=0
+pydantic<2.0
+uvicorn>=0
+flask-cors>=0

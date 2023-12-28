@@ -5,12 +5,17 @@ import "./Options.css";
 const Options = (props) => {
   const options = [
     {
-      text: "Javascript",
-      handler: props.actionProvider.handleJavascriptQuiz,
+      text: "Use Optimized models",
+      handler: props.actionProvider.setOptimizedState,
       id: 1,
     },
-    { text: "Python", handler: () => {}, id: 2 },
-    { text: "Golang", handler: () => {}, id: 3 },
+    
+    { text: "Use RAG", 
+      handler: props.actionProvider.setRagState, 
+      id: 2 
+    },
+    
+    { text: "Ask to the foundation Model", handler: () => {}, id: 3 },
   ];
 
   const buttonsMarkup = options.map((option) => (

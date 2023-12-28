@@ -4,6 +4,20 @@ import Options from "../components/Options/Options";
 
 const config = {
   botName: "LangChain in Kubernetes DEMO ",
-  initialMessages: [createChatBotMessage(`Hello!`)],
-  }
+  initialMessages: [createChatBotMessage(`Hello, I'm your assistant. Please let me know what you would like to to do:`,{
+    widget:"Options"
+  }),
+  ],
+  state: {
+    rag_mode:false,
+    opt_mode:false,
+  },
+  widgets: [
+    {
+      widgetName : "Options",
+      widgetFunc: (props) => <Options {...props} />,
+    }
+  ],  
+};
+
 export default config;

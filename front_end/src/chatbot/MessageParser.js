@@ -7,15 +7,19 @@ class MessageParser {
     console.log(message);
     const lowercase = message.toLowerCase();
 
-    if (lowercase.includes("hello")) {
-      this.actionProvider.greet();
-    }
-    
-    if (lowercase.includes("javascript") || lowercase.includes("js")) {
-      this.actionProvider.handleJavascriptQuiz();
+    if (lowercase.includes("rag")) {
+      this.actionProvider.setRagState();
     }
 
-    else (this.actionProvider.chatToPython(lowercase));
+    if (lowercase.includes("optimized")) {
+      this.actionProvider.setOptimizedState();
+    }
+    
+    if (lowercase.includes("start")) {
+      this.actionProvider.startAgain();
+    }
+
+    else (this.actionProvider.chatToModel(lowercase));
   }
 }
 
