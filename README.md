@@ -45,12 +45,12 @@ The front end can interact with both optimized and non-optimzed models. You can 
 
 This is the step by step if you want to know how we did it: 
 
-    1. Clone Intel neural compressor 
+1. Clone Intel neural compressor 
     ```{python}
         git clone https://github.com/intel/neural-compressor.git
     ```
 
-    2. Go to the folder to perform the quantization
+2. Go to the folder to perform the quantization
     ```{python}
         cd neural-compressor/examples/pytorch/nlp/huggingface_models/language-modeling/quantization/llm
     ```
