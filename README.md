@@ -64,7 +64,6 @@ This is the step by step if you want to know how we did it:
 
 NOTE: This step can take a while depending on your hardware specifications.
     ```{python}
-        # "--sq" is used to enable smooth quant
         python run_clm_no_trainer.py \
             --model tiiuae/falcon-7b-instruct \
             --quantize \
@@ -72,10 +71,6 @@ NOTE: This step can take a while depending on your hardware specifications.
             --alpha 0.5 \
             --output_dir "saved_results" 
     ```
-
-
-
-
 
 # OPTIONAL If you have AWS ECR
 
