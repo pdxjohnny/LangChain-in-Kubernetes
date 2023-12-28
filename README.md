@@ -19,11 +19,26 @@ Create REACT front end container
     cd front_end
     docker build --platform linux/amd64 -t front_end:latest .
 ```
-Create Python Back end container
+Create Python Back End container
 ```{python}
     cd chat-backend
     docker build --platform linux/amd64 -t chat:latest .
 ```
+You should now be able to see both containers on your environment.
+```{python}
+    docker images
+```
+# 2. Make all containers run FRONT_END and BACK_END.
+
+```{python}
+    docker run -p 3000:3000 front_end:latest
+
+    docker run -p 8000:8000 front_end:latest
+```
+This command will start both containers at each port. Front end will be using port 3000 and the back_end service will run on port 8000.
+
+You should now be able to see the chatbot interface on http://localhost:3000
+
 # OPTIONAL If you have AWS ECR
 
 # Deploy it on Kubernetes
