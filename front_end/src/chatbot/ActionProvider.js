@@ -19,7 +19,7 @@ class ActionProvider {
     }
 
   };
-
+  
   chatToRag = async (message) => {
     try {
       console.log('Message sent to RAG');

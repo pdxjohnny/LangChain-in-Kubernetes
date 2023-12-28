@@ -9,17 +9,13 @@ class MessageParser {
 
     if (lowercase.includes("rag")) {
       this.actionProvider.setRagState();
-    }
-
-    if (lowercase.includes("optimized")) {
+    } else if (lowercase.includes("optimized")) {
       this.actionProvider.setOptimizedState();
-    }
-    
-    if (lowercase.includes("start")) {
+    } else if (lowercase.includes("start")) {
       this.actionProvider.startAgain();
+    } else {
+      this.actionProvider.chatToModel(lowercase);
     }
-
-    else (this.actionProvider.chatToModel(lowercase));
   }
 }
 
