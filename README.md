@@ -63,6 +63,7 @@ This is the step by step if you want to know how we did it:
 4. Run the quantization. In our case we will run Falcon optimization. The script will download the model, run the quantization and save the results.
 
 NOTE: This step can take a while depending on your hardware specifications.
+
     ```{python}
         python run_clm_no_trainer.py \
             --model tiiuae/falcon-7b-instruct \
