@@ -14,7 +14,7 @@ class MessageParser {
     } else if (lowercase.includes("start")) {
       this.actionProvider.startAgain();
     } else {
-      this.actionProvider.chatToModel(lowercase);
+      this.actionProvider.chatToModelTrigger(lowercase);
     }
   }
 }

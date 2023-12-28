@@ -6,7 +6,7 @@ class ActionProvider {
   }
 
   // check conditions her 
-  chatToModel =  async (message) => {
+  chatToModelTrigger =  async (message) => {
     console.log(this.state.rag_mode);
     if (this.state.rag_mode){
       this.chatToRag(message);
