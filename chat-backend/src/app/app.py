@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/ws", response_class=PlainTextResponse)
+@app.post("/api", response_class=PlainTextResponse)
 async def process_text_data(request: Request):
     try:
         prompt_text = await request.body()

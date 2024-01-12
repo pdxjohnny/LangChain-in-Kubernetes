@@ -77,5 +77,44 @@ NOTE: This step can take a while depending on your hardware specifications.
 
 # Deploy it on Kubernetes
 
+Create a network Load balancer
+
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
+helm repo add eks https://aws.github.io/eks-charts
+helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
+  --set clusterName=kubecon_langchain \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+
+
+  TO CONNECT WITH THE ECT TO EKS
+  export KUBECONFIG=/Users/emlanza/Library/CloudStorage/OneDrive-IntelCorporation/Technical/S2E/kubeconfig-kubecon.yaml
+  export HTTPS_PROXY=http://proxy-chain.intel.com:912
+export NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.99.0/24,192.168.39.0/24
+
+# FOR ECR Update keys 
+kubectl create secret docker-registry ecr-secret \
+  --docker-server=902415107800.dkr.ecr.us-east-1.amazonaws.com \
+  --docker-username=AWS \
+  --docker-password=$(aws ecr get-login-password --region us-east-1) 
+
+# INSTALL THE NGNIX INGRESS CONTROLLER
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.hostPort.enabled=true
+
+# RUN INGRESS
+
+# RUN PODS
+
+# DELPLY PODS
+
+# TEST INTERNALLY
+
+
+
+
+
+
+
+
 
 

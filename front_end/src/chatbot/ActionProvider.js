@@ -1,12 +1,15 @@
+const connection = require('node-fetch');
+
 class ActionProvider {
   constructor(createChatBotMessage, setState,createClientMessage,state) {
     this.createChatBotMessage = createChatBotMessage;
     this.setState = setState;
     this.state = state;
   }
-
+  
   // check conditions her 
   chatToModelTrigger =  async (message) => {
+    
     console.log(this.state.rag_mode);
     if (this.state.rag_mode){
       this.chatToRag(message);
@@ -23,8 +26,8 @@ class ActionProvider {
   chatToRag = async (message) => {
     try {
       console.log('Message sent to RAG');
-      console.log(this.state.rag_mode);
-      const response = await fetch('http://127.0.0.1:8000/ws', {
+      console.log(this.state.rag_mode);      
+      const response = await connection('http://146.152.232.54/api', {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain',
