@@ -108,7 +108,7 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 # DELPLY PODS
 
 # TEST INTERNALLY
-
+a
 
 
 

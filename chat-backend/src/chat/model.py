@@ -5,7 +5,7 @@ from langchain.llms import HuggingFacePipeline
 from getpass import getpass
 from langchain.chains import RetrievalQA
 from transformers import pipeline
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM,LlamaForCausalLM,LlamaTokenizer
 import torch
 
 #DB_FAISS_PATH = '/usr/app/src/chat/vectorstore/db_faiss'
@@ -20,12 +20,13 @@ Only return the helpful answer below and nothing else. Give an answer in 1000 ch
 Helpful answer:
 """
 class chain():
-    def __init__(self,DB_FAISS_PATH):
+    def __init__(self,DB_FAISS_PATH,name_model):
         self.llm_pipeline = None
         self.qa = None
         self.qa_prompt = None
         self.prompt = None
         self.faiss_db =None
+        self.name_model = name_model
         self.custom_prompt_template = """Use the following pieces of information to answer the user's question. Explaining the answer
             If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
@@ -45,20 +46,34 @@ class chain():
         self.retrieval_qa_chain()
     
     def load_model(self):
-
         #Set model
-        model = "tiiuae/falcon-7b-instruct"
+        if self.name_model=="Llama":
+            # Download the model from Meta site 
+            ####### YOU WILL NEED TO FOLLOW THE PROCESS IN ORDER TO DOWNLOAD THE MODEL
 
-        # Load tokenizer
-        tokenizer = AutoTokenizer.from_pretrained(model)
+            # FOR THIS EXAMPLE I'VE DOWNLOADED THE MODEL ON A MODELS FOLDER AND CONVERT THEM TO A HF FORMAT
+            # INSTRUCTIONS IN THE README FILE https://ai.meta.com/blog/5-steps-to-getting-started-with-llama-2/
+            # Steps. 1- download with the script, 2- convert 
 
-        # Load model
-        model = AutoModelForCausalLM.from_pretrained(
-            model,
-                trust_remote_code=True,
-            )
-        # Set to eval mode
-        model.eval()
+            model_dir = "/usr/app/src/chat/Models/llama-2-7b-chat-hf"
+            
+            model = LlamaForCausalLM.from_pretrained(model_dir)
+            tokenizer = LlamaTokenizer.from_pretrained(model_dir)
+
+        if self.name_model=="Falcon":
+            model = "tiiuae/falcon-7b-instruct"
+
+            # Load tokenizer
+            tokenizer = AutoTokenizer.from_pretrained(model)
+
+            # Load model
+            model = AutoModelForCausalLM.from_pretrained(
+                model,
+                    trust_remote_code=True,
+                )
+            # Set to eval mode
+            model.eval()
+        
         # Create a pipline
         pipe= pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
                          trust_remote_code=True, max_new_tokens=100, 
