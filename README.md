@@ -10,9 +10,9 @@ This is a reference implementation of a question answering for a RAG implementat
 
 In these demos, you will explore how RAG ( Retrieval-Augmented Generation ) can enhance AI models by leveraging external data sources to provide context-aware answers and unlock insights.
 
-# 1. Create FRONT_END and BACK_END containers
+# 1. Create front_end and back_end containers
 
-Go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
+After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
 
 Create REACT front end container
 ```{python}
@@ -108,7 +108,18 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 # DELPLY PODS
 
 # TEST INTERNALLY
-a
+# OPTIMIZATION 
+git clone https://github.com/intel/intel-extension-for-transformers.git
+
+cd examples/huggingface/pytorch/text-generation/quantization
+
+python3 -m venv env_optim
+
+source env_optim/bin/activate
+
+pip install -r requirements.txt
+
+Perfom the optimization
 
 
 
