@@ -10,7 +10,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api
+      - path: /api_local_llama
         pathType: Prefix
         backend:
           service:
@@ -24,13 +24,11 @@ spec:
             name: chat-main-service
             port:
               name: svc-port
-  - http:
-      paths:
-      - path: /llama_chain
+      - path: /api_local_falcon_non
         pathType: Prefix
         backend:
           service:
-            name: chat-backend-service
+            name: chat-main-service
             port:
               name: svc-port
       - path: /openai_api
@@ -40,7 +38,7 @@ spec:
             name: chatopenai-main-service
             port:
               name: svc-port
-  
+      
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

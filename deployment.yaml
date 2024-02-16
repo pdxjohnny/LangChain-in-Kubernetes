@@ -1,3 +1,91 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend-service-account
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+# EndpointSlices are used for Service-based network policy rule
+# enforcement.
+- apiGroups: ["discovery.k8s.io"]
+  resources:
+    - endpointslices
+  verbs:
+    - watch
+    - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: frontend-service-account
+  namespace: default
+roleRef:
+  kind: Role
+  name: pod-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: falcon-non-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat
+      tier: falcon-non-backend
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: chat
+        tier: falcon-non-backend
+        track: stable
+    spec:
+      containers:
+        - name: chat
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/falcon_non:1.2
+          ports:
+            - name: app-port
+              containerPort: 8000
+          volumeMounts:
+            - name: efs-volume-1
+              mountPath: /efs_mounted
+      imagePullSecrets:
+        - name: ecr-secret
+      volumes:
+        - name: efs-volume-1
+          persistentVolumeClaim:
+            claimName: efs-claim100
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: falcon-non-backend-service
+  labels:
+    app.kubernetes.io/name: falcon-non-backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: chat
+    tier: falcon-non-backend
+  ports:
+    - name: svc-port
+      port: 80
+      targetPort: app-port
+      protocol: TCP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,10 +103,11 @@ spec:
         app: chat
         tier: backend
         track: stable
+      name: chat-backend-pod
     spec:
       containers:
         - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama:2.10
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama:2.18
           ports:
             - name: app-port
               containerPort: 8000
@@ -49,7 +138,6 @@ spec:
       port: 80
       targetPort: app-port
       protocol: TCP
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -69,7 +157,7 @@ spec:
     spec:
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.17
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.21
         ports:
             - name: app-port
               containerPort: 3000
@@ -112,12 +200,15 @@ spec:
     spec:
       containers:
       - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:3.9
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.25
         ports:
             - name: app-port
               containerPort: 5000
       imagePullSecrets:
         - name: ecr-secret
+      serviceAccountName: frontend-service-account
+      
+      
 ---
 apiVersion: v1
 kind: Service
@@ -135,6 +226,8 @@ spec:
       port: 80
       targetPort: app-port
       protocol: TCP
+  
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -160,6 +253,7 @@ spec:
               containerPort: 4000
       imagePullSecrets:
         - name: ecr-secret
+
 ---
 apiVersion: v1
 kind: Service
@@ -177,3 +271,4 @@ spec:
       port: 80
       targetPort: app-port
       protocol: TCP
+

@@ -3,3 +3,6 @@ chat backend Optimized/intel-extension-for-transformers
 chat-backend/src/LangServe
 __pycache__
 chat-local-llama/langchain
+TEST_DELETE
+OLD_chat-backend
+kubectl
