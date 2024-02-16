@@ -1,7 +1,6 @@
 transformers==4.29.0
 #sentence_transformers==2.2.2
-
-#xformers
+sentencepiece
 langchain_community
 sentencepiece
 langserve

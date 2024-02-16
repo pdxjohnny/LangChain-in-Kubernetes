@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
         - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/falcon_non:1.2
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/falcon_non:1.3
           ports:
             - name: app-port
               containerPort: 8000
@@ -157,7 +157,7 @@ spec:
     spec:
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.21
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.22
         ports:
             - name: app-port
               containerPort: 3000
@@ -200,7 +200,7 @@ spec:
     spec:
       containers:
       - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.25
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.28
         ports:
             - name: app-port
               containerPort: 5000
@@ -247,7 +247,7 @@ spec:
     spec:
       containers:
       - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat-openai:1.5
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat-openai:1.6
         ports:
             - name: app-port
               containerPort: 4000

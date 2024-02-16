@@ -122,9 +122,9 @@ async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:
         user_question= str(question.question)
 
-        result=openai_llm.invoke(user_question)
+        result=falcon_non_chain.invoke({"question": user_question})
         
-        return result.content
+        return result
     
     except Exception as e:
         print("Entering ERROR block...")

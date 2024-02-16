@@ -20,7 +20,7 @@ app.add_middleware(
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
-model = ChatOpenAI(openai_api_key="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")
+model = ChatOpenAI(openai_api_key="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")
 
 add_routes(
     app,

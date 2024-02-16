@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
-from app.falcon import llm_pipeline
+from app.falcon import chain
 
 app = FastAPI()
 
@@ -20,7 +20,7 @@ async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
 add_routes(app, 
-           llm_pipeline,
+           chain,
            path='/falcon_chain')
 
 if __name__ == "__main__":
