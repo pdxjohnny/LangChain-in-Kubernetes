@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: efs-app
+spec:
+  containers:
+  - name: app
+    image: centos
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo $(date -u) >> /data-dir1/out.txt; sleep 5; done"]
+    volumeMounts:
+    - name: efs-volume-1
+      mountPath: /data-dir1
+  volumes:
+  - name: efs-volume-1
+    persistentVolumeClaim:
+      claimName: efs-claim100

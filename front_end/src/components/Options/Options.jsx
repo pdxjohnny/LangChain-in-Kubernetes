@@ -5,17 +5,17 @@ import "./Options.css";
 const Options = (props) => {
   const options = [
     {
-      text: "Use Optimized models",
-      handler: props.actionProvider.setOptimizedState,
+      text: "Use Local LLaMa2 (Non optimized)",
+      handler: props.actionProvider.setLocalState,
       id: 1,
     },
     
-    { text: "Use RAG", 
-      handler: props.actionProvider.setRagState, 
+    { text: "Use Local LLaMa2 (Optimized)", 
+      handler: props.actionProvider.setOptimizedState, 
       id: 2 
     },
-    
-    { text: "Ask to the foundation Model", handler: () => {}, id: 3 },
+
+    { text: "Use external API(OpenAI)", handler: props.actionProvider.setExternalState , id: 3 },
   ];
 
   const buttonsMarkup = options.map((option) => (

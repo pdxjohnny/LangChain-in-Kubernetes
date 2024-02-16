@@ -11,6 +11,8 @@ const config = {
   state: {
     rag_mode:false,
     opt_mode:false,
+    external_mode:false,
+    local_mode:false
   },
   widgets: [
     {

@@ -15,6 +15,10 @@ class ActionProvider {
       this.chatToRag(message);
     } else if (this.state.opt_model){
       this.chatToRag(message);
+    }else if (this.state.external_mode){
+      this.chatToExternal(message);
+    }else if (this.state.local_mode){
+      this.chatToLocal(message);
     } else {
       // If none of the conditions are met, display a message
       const message = this.createChatBotMessage("Please specify the type of model you want to talk to.");
@@ -22,11 +26,65 @@ class ActionProvider {
     }
 
   };
-  
+ 
+  chatToExternal= async (message) => {
+    try {
+      console.log('Message sent to External API');  
+      // Message sent to API created by Langchain API
+      const response = await connection('http://localhost:5005/apiopenai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message to the API');
+      }
+
+      const result = await response.text();
+      console.log('Message sent successfully:', result);
+
+      const chatbotMessage = this.createChatBotMessage(result);
+      this.addMessageToState(chatbotMessage);
+    } catch (error) {
+      console.error('Error in chatToPython:', error.message);
+    }
+  };
+
+  chatToLocal = async (message) => {
+    try {
+      console.log('Message sent to local LLaMa2');  
+      const response = await fetch('http://localhost:5005/api', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      input: {
+        question: message,
+      }
+    }),
+  });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message to the API');
+      }
+
+      const result = await response.text();
+      console.log('Message sent successfully:', result);
+
+      const chatbotMessage = this.createChatBotMessage(result);
+      this.addMessageToState(chatbotMessage);
+    } catch (error) {
+      console.error('Error in chatToPython:', error.message);
+    }
+  };
+
   chatToRag = async (message) => {
     try {
-      console.log('Message sent to RAG');
-      console.log(this.state.rag_mode);      
+      console.log('Message sent to RAG');  
       const response = await connection('http://146.152.232.54/api', {
         method: 'POST',
         headers: {
@@ -48,6 +106,17 @@ class ActionProvider {
       console.error('Error in chatToPython:', error.message);
     }
   };
+
+  setExternalState = () => {
+    const message = this.createChatBotMessage("Great! Please make your question to the External API (OpenAI");
+      this.addMessageToState(message);
+
+    this.setState((prev) => ({
+      ...prev,
+      external_mode: true,
+      
+    }));
+  };
   
   setRagState = () => {
     const message = this.createChatBotMessage("Great! Please add your question to the RAG model (Docs were previously updated)");
@@ -61,12 +130,23 @@ class ActionProvider {
   };
 
   setOptimizedState = () => {
-    const message = this.createChatBotMessage("Great! Please add your question to the Optimized Model");
+    const message = this.createChatBotMessage("Great! Please add your question to the Local Optimized LLaMa2 model)");
       this.addMessageToState(message);
 
     this.setState((prev) => ({
       ...prev,
       opt_model: true,
+      
+    }));
+  };
+
+  setLocalState = () => {
+    const message = this.createChatBotMessage("Great! Please add your question to the Local LLaMa2 model");
+      this.addMessageToState(message);
+
+    this.setState((prev) => ({
+      ...prev,
+      local_mode: true,
       
     }));
   };

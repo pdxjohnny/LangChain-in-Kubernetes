@@ -11,8 +11,11 @@ class MessageParser {
       this.actionProvider.setRagState();
     } else if (lowercase.includes("optimized")) {
       this.actionProvider.setOptimizedState();
+    } else if (lowercase.includes("external")) {
+      this.actionProvider.setExternalState();
     } else if (lowercase.includes("start")) {
       this.actionProvider.startAgain();
+      
     } else {
       this.actionProvider.chatToModelTrigger(lowercase);
     }

@@ -1,26 +1,61 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress
+  name: chat-ingress
   annotations:
+    kubernetes.io/ingress.class: "nginx"
+    #nginx.ingress.kubernetes.io/rewrite-target: /$2
+    #nginx.org/proxy-connect-timeout: "175s" # Connection timeout
 spec:
-  ingressClassName: nginx
   rules:
   - http:
       paths:
-      - backend:
-          service:
-            name: frontend
-            port:
-              number: 80
-        path: /
+      - path: /api
         pathType: Prefix
-      - backend:
+        backend:
+          service:
+            name: chat-main-service
+            port:
+              name: svc-port
+      - path: /apiopenai
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-main-service
+            port:
+              name: svc-port
+  - http:
+      paths:
+      - path: /llama_chain
+        pathType: Prefix
+        backend:
           service:
             name: chat-backend-service
             port:
-              number: 8000
-        path: /api
+              name: svc-port
+      - path: /openai_api
         pathType: Prefix
-
-
+        backend:
+          service:
+            name: chatopenai-main-service
+            port:
+              name: svc-port
+  
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              name: svc-port

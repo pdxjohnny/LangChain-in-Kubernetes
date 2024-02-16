@@ -6,7 +6,7 @@ from getpass import getpass
 from langchain.chains import RetrievalQA
 from transformers import pipeline
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM,LlamaForCausalLM,LlamaTokenizer
-import torch
+#import torch
 
 #DB_FAISS_PATH = '/usr/app/src/chat/vectorstore/db_faiss'
 
@@ -55,7 +55,7 @@ class chain():
             # INSTRUCTIONS IN THE README FILE https://ai.meta.com/blog/5-steps-to-getting-started-with-llama-2/
             # Steps. 1- download with the script, 2- convert 
 
-            model_dir = "/usr/app/src/chat/Models/llama-2-7b-chat-hf"
+            model_dir = "/efs_mounted/Models/llama-2-7b-chat-hf"
             
             model = LlamaForCausalLM.from_pretrained(model_dir)
             tokenizer = LlamaTokenizer.from_pretrained(model_dir)
@@ -77,7 +77,7 @@ class chain():
         # Create a pipline
         pipe= pipeline(task="text-generation", model=model, tokenizer=tokenizer, 
                          trust_remote_code=True, max_new_tokens=100, 
-                         repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01, "torch_dtype":torch.bfloat16})
+                         repetition_penalty=1.1, model_kwargs={"max_length": 1200, "temperature": 0.01})
         
         self.llm_pipeline = HuggingFacePipeline(pipeline=pipe)
 

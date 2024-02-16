@@ -1,3 +1,5 @@
 chat-backend/src/chat/Models
 chat backend Optimized/intel-extension-for-transformers
 chat-backend/src/LangServe
+__pycache__
+chat-local-llama/langchain

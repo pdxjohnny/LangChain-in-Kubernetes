@@ -1,9 +1,13 @@
 transformers==4.29.0
 #sentence_transformers==2.2.2
-#torch>=1.9.0
-#torchvision==0.16.1
-langchain==0.0.229
+#torch
+#xformers
+langchain_community
+sentencepiece
+langserve
+langchain
 pypdf
+sse_starlette
 faiss-cpu
 chainlit==0.7.700
 fastapi

@@ -1,7 +1,7 @@
 # DEMO for deploying in K8S a RAG chatbot WITHOUT using external paid APIs.
 
 This repository is intented to share a Kubernetes implementation for a RAG chatbot using Open source tools:
-1. The LLM model will be downloaded to a POD to avoid the usage of external paid APIs. We selected Falcon 7B Instruct model In this case the repo provides 2 options : Optimized LLM and not-optimized LLM
+1. The LLM model will be downloaded to a POD to avoid the usage of external paid APIs. We selected Falcon 7B Instruct model and LLaMa 7B In this case the repo provides 2 options : Optimized LLM and not-optimized LLM
 2. The vector database used is FAISS. 
 3. It was built using LangChain 
 4. The front end is a REACT application
@@ -10,7 +10,9 @@ This is a reference implementation of a question answering for a RAG implementat
 
 In these demos, you will explore how RAG ( Retrieval-Augmented Generation ) can enhance AI models by leveraging external data sources to provide context-aware answers and unlock insights.
 
-# 1. Create front_end and back_end containers
+Note: The embeddings needed to 
+
+# 1. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
 
 After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
 
@@ -28,7 +30,7 @@ You should now be able to see both containers on your environment.
 ```{python}
     docker images
 ```
-# 2. Make all containers run FRONT_END and BACK_END.
+# 2. TEST IT : Containers test Make all containers run FRONT_END and BACK_END.
 
 ```{python}
     docker run -p 3000:3000 front_end:latest
@@ -39,8 +41,10 @@ This command will start both containers at each port. Front end will be using po
 
 You should now be able to see the chatbot interface on http://localhost:3000
 
+# Let's move to the kubernetes part
+The solution counts with a yaml file which deploys these 2 containers + ingress
 
-# Optimization step
+# 3 Optimization step
 The front end can interact with both optimized and non-optimzed models. You can find in the folder chat-backend Optimized the model already optimized.
 
 This is the step by step if you want to know how we did it: 
@@ -101,6 +105,17 @@ kubectl create secret docker-registry ecr-secret \
 # INSTALL THE NGNIX INGRESS CONTROLLER
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.hostPort.enabled=true
 
+# STEPS FROM 
+https://aws.amazon.com/blogs/containers/exposing-kubernetes-applications-part-3-nginx-ingress-controller/
+
+# FORWARDING A LA PC PARA QUE PUEDA CORRERLO LOCAL
+#Make both ports forwared
+
+kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
+
+to test 
+kubectl port-forward -n default pod/chat-backend-deployment-8595df5f46-cjqh5 8090:5000
+
 # RUN INGRESS
 
 # RUN PODS
@@ -120,6 +135,18 @@ source env_optim/bin/activate
 pip install -r requirements.txt
 
 Perfom the optimization
+
+# Steps to create langserve
+## 1 Install langchain-cli, this will enable you to use the cli and install langchain templates easily
+
+## 2 There ara multiple templates with examples,in this case we will start with a clean environme but the tempalte will generate for us the files needed 
+
+langchain app new chat-local 
+
+It generates the files we need:
+Important thing to mention is that it's using langserve api, which will make it easier
+
+
 
 
 

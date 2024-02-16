@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llama
+      tier: backend
+      track: stable
+  template:
+    metadata:
+      labels:
+        app: llama
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: llama
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama:2.1
+          ports:
+            - name: app-port
+              containerPort: 8000
+          volumeMounts:
+            - name: efs-volume-1
+              mountPath: /efs_mounted
+      imagePullSecrets:
+        - name: ecr-secret
+      volumes:
+        - name: efs-volume-1
+          persistentVolumeClaim:
+            claimName: efs-claim100
