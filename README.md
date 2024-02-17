@@ -1,6 +1,20 @@
-# DEMO for deploying in K8S a RAG chatbot WITHOUT using external paid APIs.
+# DEMO for deploying a QA chatbot in K8S
 
-This repository is intented to share a Kubernetes implementation for a RAG chatbot using Open source tools:
+This repository is intented to share a Kubernetes implementation for a chatbot using Open source tools:
+This is the architecture intended
+
+
+Since it's using local models we will rely on AWS File server(EFS) and container registry (ECR) for practical purposes. You can refer to your own File server
+
+
+1. Models
+The implementation uses 3 models
+- Local LLaMa2_7B : Downloaded from Meta and stored on a file server (EFS)
+- Local Optimized LLaMa2_7B :Model optimized using ITREX (Details on Aux section), stored on a file server (EFS)
+- External paid API : In this example we used OpenAI.
+
+2. 
+
 1. The LLM model will be downloaded to a POD to avoid the usage of external paid APIs. We selected Falcon 7B Instruct model and LLaMa 7B In this case the repo provides 2 options : Optimized LLM and not-optimized LLM
 2. The vector database used is FAISS. 
 3. It was built using LangChain 
