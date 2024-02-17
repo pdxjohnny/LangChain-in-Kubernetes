@@ -17,35 +17,29 @@ import kubernetes.client
 from kubernetes.client.rest import ApiException
 from kubernetes import client, config
 
-def kubernetes_ipv4_address_for_pod_name(pod_name):
-    # Load the service account kubeconfig
-    configuration = kubernetes.client.Configuration()
-    config.load_incluster_config(client_configuration=configuration)
 
-    namespace = pathlib.Path("/var/run/secrets/kubernetes.io/serviceaccount/namespace").read_text()
+def kubernetes_ipv4_address_for_service(service_name, namespace='default'):
+    # Load the incluster configuration
+    config.load_incluster_config()
 
-    with kubernetes.client.ApiClient(configuration) as api_client:
+    with kubernetes.client.ApiClient() as api_client:
         # Create an instance of the API class
-        api_instance = kubernetes.client.DiscoveryV1Api(api_client)
+        api_instance = kubernetes.client.CoreV1Api(api_client)
 
-        api_response = api_instance.list_namespaced_endpoint_slice(namespace)
+        try:
+            # Retrieve the service information
+            service_info = api_instance.read_namespaced_service(name=service_name, namespace=namespace)
+        except ApiException as e:
+            raise Exception(f"Error reading service information: {e}")
 
-    found_endpoint = None
-    for endpoint_slice in api_response.items:
-        for endpoint in endpoint_slice.endpoints:
-            if pod_name.strip() in endpoint.target_ref.name:
-                found_endpoint = endpoint
-                break
-        if found_endpoint:
-            break
-    if not found_endpoint:
-        raise Exception(f"Pod {pod_name} not found")
+        service_cluster_ip = service_info.spec.cluster_ip
 
-    # TODO Handle more cases than zeroith index?
-    return found_endpoint.addresses[0]
+        return service_cluster_ip
 
-pod_openai_api= kubernetes_ipv4_address_for_pod_name("chatopenai")
-print(kubernetes_ipv4_address_for_pod_name("chatopenai"))
+# Get services ip
+openai_svc = kubernetes_ipv4_address_for_service("chatopenai-main-service")
+falcon_non_svc = kubernetes_ipv4_address_for_service("falcon-non-backend-service")
+llama_non_svc = kubernetes_ipv4_address_for_service("llama-non-service")
 
 class Data(BaseModel):
     question: str
@@ -60,29 +54,18 @@ app.add_middleware(
     allow_headers=["*"],  # Add comma here
     allow_credentials=False,
 )
-openai_llm = RemoteRunnable("http://10.100.59.107:80/openai_api").with_types(input_type=str)
-llama_chain = RemoteRunnable("http://10.100.53.180:80/llama_chain").with_types(input_type=str)
-falcon_non_chain = RemoteRunnable("http://10.100.236.142:80/falcon_chain").with_types(input_type=str)
+openai_llm = RemoteRunnable("http://"+openai_svc+":80/openai_api").with_types(input_type=str)
+llama_chain = RemoteRunnable("http://"+llama_non_svc+":80/llama_chain").with_types(input_type=str)
+falcon_non_chain = RemoteRunnable("http://"+falcon_non_svc+":80/falcon_chain").with_types(input_type=str)
 
 @app.post("/api_local_llama", response_class=PlainTextResponse)
 async def process_text_data(question: Data,user_agent: str = Header(None)):
-
     try:
-        user_question= str(question.question)
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    "You are a highly educated person who loves to use big words. "
-                    + "You are also concise. Never answer in more than three sentences.",
-                ),
-                ("human", user_question),
-            ]       
-        ).format_messages()     
-        result = llama_chain.invoke(prompt)  # Pass the extracted question
-        print(result.content)
+        user_question= question.question
+
+        result=llama_chain.invoke({"question": user_question})
         
-        return result.content
+        return result
     
     except Exception as e:
         error_msg = f"Error: {str(e)}"
@@ -120,7 +103,7 @@ async def process_text_data(question: Data,user_agent: str = Header(None)):
 @app.post("/api_local_falcon_non")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:
-        user_question= str(question.question)
+        user_question= question.question
 
         result=falcon_non_chain.invoke({"question": user_question})
         

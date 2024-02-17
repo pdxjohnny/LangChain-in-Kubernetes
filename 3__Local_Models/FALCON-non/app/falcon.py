@@ -3,16 +3,6 @@ from langchain.prompts import PromptTemplate
 from transformers import AutoTokenizer, AutoModelForCausalLM,pipeline
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
 
-
-custom_prompt_template = """Use the following pieces of information to answer the user's question. Explaining the answer
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
-
-Question: {question}
-
-Only return the helpful answer below and nothing else. Give an answer in 1000 characteres at maximum please
-Helpful answer:
-"""
-
 model_path="/efs_mounted/Models/Falcon-7b-instruct"
 local_model = AutoModelForCausalLM.from_pretrained(model_path, return_dict=True)
 local_tokenizer = AutoTokenizer.from_pretrained(model_path)

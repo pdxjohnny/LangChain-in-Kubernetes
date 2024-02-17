@@ -31,13 +31,6 @@ spec:
             name: chat-main-service
             port:
               name: svc-port
-      - path: /openai_api
-        pathType: Prefix
-        backend:
-          service:
-            name: chatopenai-main-service
-            port:
-              name: svc-port
       
 ---
 apiVersion: networking.k8s.io/v1

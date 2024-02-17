@@ -8,30 +8,23 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: default
-  name: pod-reader
+  name: frontend-service-reader
 rules:
-# EndpointSlices are used for Service-based network policy rule
-# enforcement.
-- apiGroups: ["discovery.k8s.io"]
-  resources:
-    - endpointslices
-  verbs:
-    - watch
-    - list
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list"]  # Adjust as needed based on required permissions
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: read-pods
-  namespace: default
+  name: frontend-service-reader-binding
 subjects:
 - kind: ServiceAccount
   name: frontend-service-account
   namespace: default
 roleRef:
   kind: Role
-  name: pod-reader
+  name: frontend-service-reader
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: apps/v1
@@ -89,7 +82,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chat-backend-deployment
+  name: llama-non-deployment
 spec:
   replicas: 1
   selector:
@@ -103,7 +96,7 @@ spec:
         app: chat
         tier: backend
         track: stable
-      name: chat-backend-pod
+      name: llama-non-pod
     spec:
       containers:
         - name: chat
@@ -125,9 +118,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chat-backend-service
+  name: llama-non-service
   labels:
-    app.kubernetes.io/name: chat-backend-service
+    app.kubernetes.io/name: llama-non-service
 spec:
   type: ClusterIP
   selector:
@@ -157,7 +150,7 @@ spec:
     spec:
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.22
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.23
         ports:
             - name: app-port
               containerPort: 3000
@@ -200,15 +193,13 @@ spec:
     spec:
       containers:
       - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.28
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.39
         ports:
             - name: app-port
               containerPort: 5000
       imagePullSecrets:
         - name: ecr-secret
       serviceAccountName: frontend-service-account
-      
-      
 ---
 apiVersion: v1
 kind: Service
@@ -246,13 +237,20 @@ spec:
         tier: chatopenai-main
     spec:
       containers:
-      - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat-openai:1.6
+      - name: chatopenai
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat-openai:1.8
         ports:
             - name: app-port
               containerPort: 4000
+        volumeMounts:
+            - name: efs-volume-1
+              mountPath: /efs_mounted
       imagePullSecrets:
         - name: ecr-secret
+      volumes:
+        - name: efs-volume-1
+          persistentVolumeClaim:
+            claimName: efs-claim100
 
 ---
 apiVersion: v1

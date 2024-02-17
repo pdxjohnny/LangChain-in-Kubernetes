@@ -20,7 +20,13 @@ app.add_middleware(
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
-model = ChatOpenAI(openai_api_key="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")
+
+#Open AI key stored on a File server
+f = open('/efs_mounted/Models/openai_key.txt')
+# Read the contents of the file into a variable
+OPENAI_KEY = f.read()
+
+model = ChatOpenAI(openai_api_key=OPENAI_KEY)
 
 add_routes(
     app,
