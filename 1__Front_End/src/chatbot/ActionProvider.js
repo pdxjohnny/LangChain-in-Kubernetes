@@ -61,7 +61,7 @@ class ActionProvider {
   chatToLocal = async (message) => {
     try {
       console.log('Message sent to local LLaMa2');  
-      const response = await fetch('http://localhost:8000/api_local_llama', {
+      const response = await fetch('http://localhost:8000/api_local_falcon_non', {
         method: 'POST',
         headers: {
          'Accept': 'application/json',

@@ -53,7 +53,7 @@ openai_llm = RemoteRunnable("http://"+openai_svc+":80/openai_api").with_types(in
 llama_chain = RemoteRunnable("http://"+llama_non_svc+":80/llama_chain").with_types(input_type=str)
 falcon_non_chain = RemoteRunnable("http://"+falcon_non_svc+":80/falcon_chain").with_types(input_type=str)
 
-@app.post("/api_local_llama", response_class=PlainTextResponse)
+@app.post("/api_local_llama")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:
         user_question= question.question
