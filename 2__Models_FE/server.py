@@ -1,17 +1,12 @@
-from fastapi import FastAPI, Request, Request,HTTPException
+from fastapi import FastAPI,HTTPException
 from langserve import RemoteRunnable
 from langchain.prompts.chat import ChatPromptTemplate
 from fastapi.responses import PlainTextResponse
-from fastapi import Request
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi import Header
-import os 
-import pathlib
 from pprint import pprint
-
-import yaml
 import kubernetes
 import kubernetes.client
 from kubernetes.client.rest import ApiException
