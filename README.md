@@ -12,7 +12,7 @@ The front End is based on react-chatbot-kit  https://www.npmjs.com/package/react
 2.  Models
 The implementation uses 3 models : 
 - Local LLaMa2_7B : Downloaded from Meta and stored on a file server (EFS)
-- Local Optimized LLaMa2_7B :Model optimized using ITREX (Details on Aux section), stored on a file server (EFS)
+- Local Optimized LLaMa2_7B :Model optimized using ITREX (Details on XXX Optimization section), stored on a file server (EFS)
 - External paid API : In this example we used OpenAI.
 
 # Architecture
@@ -26,10 +26,31 @@ The implementation uses 3 models :
 ### Install ngnix
 ### Install Storage drivers
 ### Install Grafana for visualization
+Instalation of grafana POD 
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/prometheus
+
+This installed grafana and prometheus
+
+sudo kubectl port-forward service/grafana 1002:80
+
+kubectl exec -it <pod_name> -n default -- bash
+The password should be reseted
+
+grafana-cli admin reset-admin-password admin
 
 
 
-# AUX
+# Optimization section
+
+We will be using Intel Extension for transformers to optimize LLaMa2 7B model. This step will help to reduce the size of the model from ~30GB to 14GB. Thanks to techiques like quantization.
+
+git clone https://github.com/intel/intel-extension-for-transformers.git
+cd  intel-extension-for-transformers
+pip install -r requirement.txt
+python setup.py install
 
 This is a reference implementation of a question answering for a RAG implementation using Langchain
 
