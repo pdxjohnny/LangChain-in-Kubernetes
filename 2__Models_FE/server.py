@@ -35,6 +35,7 @@ def kubernetes_ipv4_address_for_service(service_name, namespace='default'):
 openai_svc = kubernetes_ipv4_address_for_service("chatopenai-main-service")
 falcon_non_svc = kubernetes_ipv4_address_for_service("falcon-non-backend-service")
 llama_non_svc = kubernetes_ipv4_address_for_service("llama-non-service")
+llama_optim_svc = kubernetes_ipv4_address_for_service("llama7b-opt-service")
 
 class Data(BaseModel):
     question: str
@@ -52,7 +53,22 @@ app.add_middleware(
 openai_llm = RemoteRunnable("http://"+openai_svc+":80/openai_api").with_types(input_type=str)
 llama_chain = RemoteRunnable("http://"+llama_non_svc+":80/llama_chain").with_types(input_type=str)
 falcon_non_chain = RemoteRunnable("http://"+falcon_non_svc+":80/falcon_chain").with_types(input_type=str)
+llama_optim_chain = RemoteRunnable("http://"+llama_optim_svc+":80/llama_optim_chain").with_types(input_type=str)
 
+@app.post("/api_local_llama_optim")
+async def process_text_data(question: Data,user_agent: str = Header(None)):
+    try:
+        user_question= question.question
+
+        result=llama_optim_chain.invoke({"question": user_question})
+        
+        return result
+    
+    except Exception as e:
+        error_msg = f"Error: {str(e)}"
+        print(error_msg)
+        raise HTTPException(status_code=500, detail=error_msg)
+    
 @app.post("/api_local_llama")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:

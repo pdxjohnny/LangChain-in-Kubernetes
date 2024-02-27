@@ -1,4 +1,4 @@
-# DEMO for deploying a QA chatbot in K8S
+# DEMO for deploying a QA chatbot in Kubernetes
 
 This repository is intented to share a Kubernetes implementation for a chatbot using Open source tools:
 This is the architecture intended

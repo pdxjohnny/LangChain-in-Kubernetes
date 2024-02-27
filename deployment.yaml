@@ -45,6 +45,15 @@ spec:
         tier: falcon-non-backend
         track: stable
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
+                values:
+                - intensive-node 
       containers:
         - name: chat
           image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/falcon_non:1.4
@@ -98,6 +107,15 @@ spec:
         track: stable
       name: llama-non-pod
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
+                values:
+                - intensive-node 
       containers:
         - name: chat
           image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama:2.19
@@ -148,9 +166,18 @@ spec:
         app: chat
         tier: frontend
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
+                values:
+                - light_node 
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.23
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.24
         ports:
             - name: app-port
               containerPort: 3000
@@ -191,9 +218,18 @@ spec:
         app: chat
         tier: chat-main
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
+                values:
+                - light_node
       containers:
       - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.40
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.42
         ports:
             - name: app-port
               containerPort: 5000
@@ -236,6 +272,15 @@ spec:
         app: chat
         tier: chatopenai-main
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
+                values:
+                - light_node
       containers:
       - name: chatopenai
         image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat-openai:1.8
@@ -270,3 +315,62 @@ spec:
       targetPort: app-port
       protocol: TCP
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama7b-optim
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat
+      tier: llama7b-optim
+  template:
+    metadata:
+      labels:
+        app: chat
+        tier: llama7b-optim
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: eks.amazonaws.com/nodegroup
+                operator: In
+                values:
+                - intensive-node 
+      containers:
+      - name: chatopenai
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b-optim:1.0
+        ports:
+            - name: app-port
+              containerPort: 4000
+        volumeMounts:
+            - name: efs-volume-1
+              mountPath: /efs_mounted
+      imagePullSecrets:
+        - name: ecr-secret
+      volumes:
+        - name: efs-volume-1
+          persistentVolumeClaim:
+            claimName: efs-claim100
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llama7b-opt-service
+  labels:
+    app.kubernetes.io/name: llama7b-opt-service
+spec:
+  type: ClusterIP
+  selector:
+    app: chat
+    tier: llama7b-optim
+  ports:
+    - name: svc-port
+      port: 80
+      targetPort: app-port
+      protocol: TCP

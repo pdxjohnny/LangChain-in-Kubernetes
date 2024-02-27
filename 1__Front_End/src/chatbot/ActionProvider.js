@@ -19,6 +19,8 @@ class ActionProvider {
       this.chatToExternal(message);
     }else if (this.state.local_mode){
       this.chatToLocal(message);
+    }else if (this.state.opt_model){
+      this.chatToLlamaOptLocal(message);
     } else {
       // If none of the conditions are met, display a message
       const message = this.createChatBotMessage("Please specify the type of model you want to talk to.");
@@ -57,7 +59,36 @@ class ActionProvider {
       console.error('Error in chatToPython:', error.message);
     }
   };
+  chatToLlamaOptLocal = async (message) => {
+    try {
+      console.log('Message sent to local LLaMa2');  
+      const response = await fetch('http://localhost:8000/api_local_llama_optim', {
+        method: 'POST',
+        headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: message,
+          config: {},
+          kwargs: {}
+      }),
+    });
 
+      if (!response.ok) {
+        throw new Error('Failed to send message to the API');
+      }
+
+      const result = await response.text();
+      console.log('Message sent successfully:', result);
+
+      const chatbotMessage = this.createChatBotMessage(result);
+      this.addMessageToState(chatbotMessage);
+    } catch (error) {
+      console.error('Error in chatToPython:', error.message);
+    }
+  };
+  
   chatToLocal = async (message) => {
     try {
       console.log('Message sent to local LLaMa2');  
