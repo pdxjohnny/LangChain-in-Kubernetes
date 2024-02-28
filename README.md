@@ -26,7 +26,7 @@ The architecture for this implementation is outlined below:
    - **Local LlaMa.cpp**: An optimized version of the `llama cpp` model.
    - **External Paid API**: In this demo, we demonstrate the integration with OpenAI's paid API.
 
-## Steps
+# Steps
 
 The proposed architecture serves as a foundational guide for deploying multiple Language Model Models (LLMs) in a Kubernetes environment.
 
@@ -35,12 +35,12 @@ Feel free to explore the provided resources and adapt the implementation to your
 Let's bring your chatbot to life in Kubernetes!
 
 
-# 1. Clone the repository
+## 1. Clone the repository
 ```bash
 git clone https://github.com/ezelanza/LangChain-in-Kubernetes.git
 ```
 
-# 2. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
+## 2. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
 
 After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
 
