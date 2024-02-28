@@ -70,7 +70,7 @@ You should now be able to see both containers on your environment.
 ## 3. Pull containers
 Your containers should live somewhere in order to be downloaded when the Kubernetes cluster will be created.
 
-
+# TO BE MODIFIED
 
 # 2. Kubernetes
 ## 2.1 Configure cluster
