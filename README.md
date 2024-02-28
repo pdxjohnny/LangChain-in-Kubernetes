@@ -66,6 +66,10 @@ You should now be able to see both containers on your environment.
 ```{python}
     docker images
 ```
+## 3. Pull containers
+Your containers should live somewhere in order to be downloaded when the Kubernetes cluster will be created.
+
+
 
 # 2. Kubernetes
 ## 2.1 Configure cluster
