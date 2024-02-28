@@ -31,7 +31,27 @@ Feel free to explore the provided resources and adapt the implementation to your
 
 Let's bring your chatbot to life in Kubernetes!
 
-# 1. Pods creation 
+
+# 1. Clone the repository
+
+# 2. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
+
+After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
+
+Create REACT front end container
+```{python}
+    cd front_end
+    docker build --platform linux/amd64 -t front_end:latest .
+```
+Create Python Back End container
+```{python}
+    cd chat-backend
+    docker build --platform linux/amd64 -t chat:latest .
+```
+You should now be able to see both containers on your environment.
+```{python}
+    docker images
+```
 
 # 2. Kubernetes
 ## 2.1 Configure cluster
@@ -70,24 +90,7 @@ In these demos, you will explore how RAG ( Retrieval-Augmented Generation ) can 
 
 Note: The embeddings needed to 
 
-# 1. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
 
-After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
-
-Create REACT front end container
-```{python}
-    cd front_end
-    docker build --platform linux/amd64 -t front_end:latest .
-```
-Create Python Back End container
-```{python}
-    cd chat-backend
-    docker build --platform linux/amd64 -t chat:latest .
-```
-You should now be able to see both containers on your environment.
-```{python}
-    docker images
-```
 # 2. TEST IT : Containers test Make all containers run FRONT_END and BACK_END.
 
 ```{python}
