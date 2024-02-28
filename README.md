@@ -16,6 +16,9 @@ The implementation uses 3 models :
 - External paid API : In this example we used OpenAI.
 
 # Architecture
+The architecture is descipted below : 
+![Architecture](image_url)
+
 
 ## Description 
 

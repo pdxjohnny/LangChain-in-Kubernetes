@@ -15,7 +15,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-template = """Use the following pieces of information to answer the user's question. Explaining the answer
+template = """You are a very smart and educated assistant to guide the user to understand the concepts. Please Explaining the answer
 If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 Question: {question}
@@ -24,7 +24,7 @@ Only return the helpful answer below and nothing else. Give an answer in 1000 ch
 Helpful answer:
 """
 
-prompt = PromptTemplate.from_template(template)
+prompt = PromptTemplate.from_template(template) 
 
 @app.get("/")
 async def redirect_root_to_docs():
