@@ -36,6 +36,8 @@ Let's bring your chatbot to life in Kubernetes!
 
 
 # 1. Clone the repository
+```bash
+git clone https://github.com/ezelanza/LangChain-in-Kubernetes.git
 
 # 2. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
 
