@@ -42,7 +42,8 @@ git clone https://github.com/ezelanza/LangChain-in-Kubernetes.git
 
 ## 2. Create Containers
 
-After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor, your should change according your platform) :
+After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor, your should change according your platform) 
+BE SURE TO HAVE YOUR DOCKER ENGINE INSTALLED, Refer to https://www.docker.com 
 
 Create REACT front end container
 ```{python}
