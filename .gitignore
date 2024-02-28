@@ -10,3 +10,4 @@ kubectl
 6__Converter_to_EMBN
 3__External_Models/OpenAI/app/server.py
 5__Conversational
+.venv
