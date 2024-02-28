@@ -16,6 +16,9 @@ The architecture for this implementation is outlined below:
 1. **Front End**:
    The front end is built using `react-chatbot-kit`, a versatile and customizable chatbot framework. You can find more information about `react-chatbot-kit` [here](https://www.npmjs.com/package/react-chatbot-kit).
 
+1. **Front End for different models**:
+   Since we will be using multiple LLMs, we would need to create 1 LLMs "front_end" to centralize all the requests to after send them to where each particular model is instantiated.
+
 2. **Models**:
    This implementation relies on three different models:
    - **Local LLaMa2_7B**: This model is downloaded from Meta and stored on a file server.
@@ -43,7 +46,7 @@ Create REACT front end container
     cd front_end
     docker build --platform linux/amd64 -t front_end:latest .
 ```
-Create Python Back End container
+Create Python Back_End container
 ```{python}
     cd chat-backend
     docker build --platform linux/amd64 -t chat:latest .
