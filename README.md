@@ -1,28 +1,37 @@
 # DEMO for deploying a QA chatbot in Kubernetes
 
+Welcome to the repository for deploying a QA chatbot in Kubernetes using open-source tools.
+
 This repository is intented to share a Kubernetes implementation for a chatbot using Open source tools:
 This is the architecture intended
 
 Since it's using local models we will rely on AWS File server(EFS) and container registry (ECR) for practical purposes. You can refer to your own File server and your own 
 
-# Description
-1. Front_End
-The front End is based on react-chatbot-kit  https://www.npmjs.com/package/react-chatbot-kit
+# Description of the architecture
 
-2.  Models
-The implementation uses 3 models : 
-- Local LLaMa2_7B : Downloaded from Meta and stored on a file server (EFS)
-- Local Optimized LLaMa2_7B :Model optimized using ITREX (Details on XXX Optimization section), stored on a file server (EFS)
-- External paid API : In this example we used OpenAI.
-
-# Architecture
-The architecture is descipted below : 
+The architecture for this implementation is outlined below:
 ![Architecture](tmp/architecture.png)
 
 
-## Description 
+1. **Front End**:
+   The front end is built using `react-chatbot-kit`, a versatile and customizable chatbot framework. You can find more information about `react-chatbot-kit` [here](https://www.npmjs.com/package/react-chatbot-kit).
 
-# 1. Pods creation
+2. **Models**:
+   This implementation relies on three different models:
+   - **Local LLaMa2_7B**: This model is downloaded from Meta and stored on a file server.
+   - **Local Optimized LLaMa2_7B**: An optimized version of the LLaMa2_7B model created using ITREX (details on optimization in the XXX Optimization section). This optimized model is also stored on a file server (EFS).
+   - **Local LlaMa.cpp**: An optimized version of the `llama cpp` model.
+   - **External Paid API**: In this demo, we demonstrate the integration with OpenAI's paid API.
+
+## Steps
+
+The proposed architecture serves as a foundational guide for deploying multiple Language Model Models (LLMs) in a Kubernetes environment.
+
+Feel free to explore the provided resources and adapt the implementation to your specific use case. 
+
+Let's bring your chatbot to life in Kubernetes!
+
+# 1. Pods creation 
 
 # 2. Kubernetes
 ## 2.1 Configure cluster
