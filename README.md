@@ -17,7 +17,7 @@ The implementation uses 3 models :
 
 # Architecture
 The architecture is descipted below : 
-![Architecture]("tmp/architecture.png")
+![Architecture](tmp/architecture.png)
 
 
 ## Description 
