@@ -1,12 +1,9 @@
 from fastapi import FastAPI,HTTPException
 from langserve import RemoteRunnable
 from langchain.prompts.chat import ChatPromptTemplate
-from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi import Header
-from pprint import pprint
 import kubernetes
 import kubernetes.client
 from kubernetes.client.rest import ApiException

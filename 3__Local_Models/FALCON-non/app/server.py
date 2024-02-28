@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-template = """Use the following pieces of information to answer the user's question. Explaining the answer
+template = """You are a very smart and educated assistant to guide the user to understand the concepts. Please Explaining the answer
 If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
 Question: {question}

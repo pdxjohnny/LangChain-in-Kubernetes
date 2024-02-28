@@ -4,6 +4,7 @@ from fastapi.responses import RedirectResponse
 from langchain_community.chat_models import ChatOpenAI
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
+from langchain import PromptTemplate
 import os
 
 app = FastAPI()
@@ -15,6 +16,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+template = """You are a very smart and educated assistant to guide the user to understand the concepts. Please Explaining the answer
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+
+Question: {question}
+
+Only return the helpful answer below and nothing else. Give an answer in 1000 characteres at maximum please
+Helpful answer:
+"""
+
+prompt = PromptTemplate.from_template(template) 
 
 @app.get("/")
 async def redirect_root_to_docs():
@@ -30,7 +41,7 @@ model = ChatOpenAI(openai_api_key=OPENAI_KEY)
 
 add_routes(
     app,
-    model,
+    prompt|model,
     path="/openai_api",
 )
 

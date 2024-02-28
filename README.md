@@ -40,19 +40,26 @@ Let's bring your chatbot to life in Kubernetes!
 git clone https://github.com/ezelanza/LangChain-in-Kubernetes.git
 ```
 
-## 2. Create front_end and back_end containers (Containers could live in an Intel docker Hub)
+## 2. Create Containers
 
 After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor) :
 
 Create REACT front end container
 ```{python}
-    cd front_end
+    cd 1__Front_End 
     docker build --platform linux/amd64 -t front_end:latest .
 ```
-Create Python Back_End container
+Create Python Front_end_LLM container
 ```{python}
-    cd chat-backend
-    docker build --platform linux/amd64 -t chat:latest .
+    cd 2__Models_FE
+    docker build --platform linux/amd64 -t models_front_end:latest .
+```
+Repeat this step to all the containers you'd like to create
+
+Create Python LLM container for each model (In this example for LlaMa7B non optimized)
+```{python}
+    cd 3__Local_Models/LLAMA-NON 
+    docker build --platform linux/amd64 -t llama-7b-non:latest .
 ```
 You should now be able to see both containers on your environment.
 ```{python}
