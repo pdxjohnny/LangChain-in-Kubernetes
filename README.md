@@ -54,9 +54,10 @@ Create Python Front_end_LLM container
     cd 2__Models_FE
     docker build --platform linux/amd64 -t models_front_end:latest .
 ```
-Repeat this step to all the containers you'd like to create
 
-Create Python LLM container for each model (In this example for LlaMa7B non optimized)
+
+Create Python LLM container for each model (In this example for LlaMa7B non optimized).
+Note : Repeat this step to all the containers you'd like to create
 ```{python}
     cd 3__Local_Models/LLAMA-NON 
     docker build --platform linux/amd64 -t llama-7b-non:latest .
