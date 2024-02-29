@@ -84,6 +84,8 @@ And finally push it to your repository
 ```
 docker push <username>/front_end:1.0
 ```
+## 4. Set up your kubernetes enviroment
+
 
 # TO BE MODIFIED
 
