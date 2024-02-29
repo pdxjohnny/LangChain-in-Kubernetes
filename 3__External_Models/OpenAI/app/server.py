@@ -5,7 +5,6 @@ from langchain_community.chat_models import ChatOpenAI
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
 from langchain import PromptTemplate
-import os
 
 app = FastAPI()
 # Set up CORS middleware to allow requests from any origin

@@ -7,7 +7,7 @@ from fastapi import Header
 import kubernetes
 import kubernetes.client
 from kubernetes.client.rest import ApiException
-from kubernetes import client, config
+from kubernetes import config
 
 
 def kubernetes_ipv4_address_for_service(service_name, namespace='default'):

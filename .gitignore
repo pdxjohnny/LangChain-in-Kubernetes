@@ -11,3 +11,4 @@ kubectl
 3__External_Models/OpenAI/app/server.py
 5__Conversational
 .venv
+3__Local_Models/LLAMA-OPT

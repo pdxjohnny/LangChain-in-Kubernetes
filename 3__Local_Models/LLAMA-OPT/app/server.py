@@ -25,7 +25,7 @@ Helpful answer:
 """
 
 prompt = PromptTemplate.from_template(template)
-
+print("model LOADED)")
 @app.get("/")
 async def redirect_root_to_docs():
     return RedirectResponse("/docs")

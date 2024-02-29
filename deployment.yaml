@@ -174,10 +174,11 @@ spec:
               - key: eks.amazonaws.com/nodegroup
                 operator: In
                 values:
-                - light_node 
+                - lightnode 
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.24
+        #image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.24
+        image : ezelanza/front_end:1.0
         ports:
             - name: app-port
               containerPort: 3000
@@ -223,7 +224,9 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
+                # THIS HAS TO BE CHANGED IN ORDER TO SET WITH YOUR NODE
               - key: eks.amazonaws.com/nodegroup
+              #- key : iks-vm-u22-cd-wk-1-28-4-23-11-24  
                 operator: In
                 values:
                 - light_node

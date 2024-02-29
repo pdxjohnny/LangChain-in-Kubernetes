@@ -90,14 +90,29 @@ In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com
 #export HTTPS_PROXY=http://proxy-chain.intel.com:912
 
 ### 4.1 Install Ngnix
+
+NGNIX....
 ```
-kubectl apply -r ngnix.yaml
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.hostPort.enabled=true
 ```
 
-### 4.2 
+### 4.2 Deploy services
 
-### 4.1 Define work
-## 5. Deploy the cluster
+### 4.3 Deployment
+This is where you create all the containers and te configuration descripted on the .yaml file
+
+### 4.4 ACCESS! 
+
+```
+kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
+```
+
+# How was the optimization done?
+
+We performed a weightonlyoptimization thanks to Intel Extensions for transformers.
+
+These are the steps you should follow in order to replicate it.
+
 
 
 # TO BE MODIFIED
@@ -204,7 +219,7 @@ https://aws.amazon.com/blogs/containers/exposing-kubernetes-applications-part-3-
 # FORWARDING A LA PC PARA QUE PUEDA CORRERLO LOCAL
 #Make both ports forwared
 
-kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
+
 
 to test 
 kubectl port-forward -n default pod/chat-backend-deployment-8595df5f46-cjqh5 8090:5000
