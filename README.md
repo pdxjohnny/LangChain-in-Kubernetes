@@ -88,6 +88,9 @@ docker push <username>/front_end:1.0
 In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com.
 
 ### 4.1 Install Ngnix
+```
+kubectl apply -r ngnix.yaml
+```
 
 ### 4.2 
 
