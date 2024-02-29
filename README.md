@@ -87,6 +87,9 @@ docker push <username>/front_end:1.0
 ## 4. Set up your kubernetes enviroment
 In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com.
 
+### 4.1 Install Ngnix
+
+### 4.2 
 
 ### 4.1 Define work
 ## 5. Deploy the cluster
