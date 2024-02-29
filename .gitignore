@@ -12,3 +12,5 @@ kubectl
 5__Conversational
 .venv
 3__Local_Models/LLAMA-OPT
+3__Local_Models/LLAMA-cpp
+3__Local_Models/langchain
