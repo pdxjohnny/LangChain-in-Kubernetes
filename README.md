@@ -85,6 +85,11 @@ And finally push it to your repository
 docker push <username>/front_end:1.0
 ```
 ## 4. Set up your kubernetes enviroment
+In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com.
+
+
+### 4.1 Define work
+## 5. Deploy the cluster
 
 
 # TO BE MODIFIED
@@ -93,23 +98,6 @@ docker push <username>/front_end:1.0
 ## 2.1 Configure cluster
 ### Install ngnix
 ### Install Storage drivers
-### Install Grafana for visualization
-Instalation of grafana POD 
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install prometheus prometheus-community/prometheus
-
-This installed grafana and prometheus
-
-sudo kubectl port-forward service/grafana 1002:80
-
-kubectl exec -it <pod_name> -n default -- bash
-The password should be reseted
-
-grafana-cli admin reset-admin-password admin
-
-
 
 # Optimization section
 
