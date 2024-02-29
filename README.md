@@ -85,7 +85,9 @@ And finally push it to your repository
 docker push <username>/front_end:1.0
 ```
 ## 4. Set up your kubernetes enviroment
-In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com.
+In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com. Follow this guide to connect to your enviroment https://console.cloud.intel.com/docs/guides/k8s_guide.html 
+
+#export HTTPS_PROXY=http://proxy-chain.intel.com:912
 
 ### 4.1 Install Ngnix
 ```
