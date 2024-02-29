@@ -67,8 +67,24 @@ You should now be able to see both containers on your environment.
 ```{python}
     docker images
 ```
-## 3. Pull containers
+## 3. Pull containers to the registry
 Your containers should live somewhere in order to be downloaded when the Kubernetes cluster will be created.
+
+There are several options to use including Amazon ECR. 
+
+In this case we will use Docker HUB. Refer to docker documentation depending on the OS you're using to get instructions to create your repository.
+
+```
+docker login
+```
+Tag your container (For example for front_end container)
+```
+docker tag front_end:1.0 <username>/front_end:1.0
+```
+And finally push it to your repository
+```
+docker push <username>/front_end:1.0
+```
 
 # TO BE MODIFIED
 
