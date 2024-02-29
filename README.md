@@ -2,8 +2,7 @@
 
 Welcome to the repository for deploying a QA chatbot in Kubernetes using open-source tools.
 
-This repository is intented to share a Kubernetes implementation for a chatbot using Open source tools:
-This is the architecture intended
+This repository is intented to share a STEP-BY-STEP Kubernetes implementation for a chatbot using Open source tools. This doc will guide you to each step from creating the containers to the lunching a kubernetes server.
 
 Since it's using local models we will rely on AWS File server(EFS) and container registry (ECR) for practical purposes. You can refer to your own File server and your own 
 
@@ -26,7 +25,7 @@ The architecture for this implementation is outlined below:
    - **Local LlaMa.cpp**: An optimized version of the `llama cpp` model.
    - **External Paid API**: In this demo, we demonstrate the integration with OpenAI's paid API.
 
-# Steps
+# Step by step
 
 The proposed architecture serves as a foundational guide for deploying multiple Language Model Models (LLMs) in a Kubernetes environment.
 
@@ -43,7 +42,7 @@ git clone https://github.com/ezelanza/LangChain-in-Kubernetes.git
 ## 2. Create Containers
 
 After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor, your should change according your platform) 
-BE SURE TO HAVE YOUR DOCKER ENGINE INSTALLED, Refer to https://www.docker.com 
+*NOTE*BE SURE TO HAVE YOUR DOCKER ENGINE INSTALLED, Refer to https://www.docker.com 
 
 Create REACT front end container
 ```{python}
