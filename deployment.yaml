@@ -30,67 +30,6 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: falcon-non-backend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: chat
-      tier: falcon-non-backend
-      track: stable
-  template:
-    metadata:
-      labels:
-        app: chat
-        tier: falcon-non-backend
-        track: stable
-    spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: eks.amazonaws.com/nodegroup
-                operator: In
-                values:
-                - intensive-node 
-      containers:
-        - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/falcon_non:1.4
-          ports:
-            - name: app-port
-              containerPort: 8000
-          volumeMounts:
-            - name: efs-volume-1
-              mountPath: /efs_mounted
-      imagePullSecrets:
-        - name: ecr-secret
-      volumes:
-        - name: efs-volume-1
-          persistentVolumeClaim:
-            claimName: efs-claim100
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: falcon-non-backend-service
-  labels:
-    app.kubernetes.io/name: falcon-non-backend-service
-spec:
-  type: ClusterIP
-  selector:
-    app: chat
-    tier: falcon-non-backend
-  ports:
-    - name: svc-port
-      port: 80
-      targetPort: app-port
-      protocol: TCP
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: llama-non-deployment
 spec:
   replicas: 1
@@ -118,7 +57,7 @@ spec:
                 - intensive-node 
       containers:
         - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama:2.19
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b-hf-NON-optim:2.19
           ports:
             - name: app-port
               containerPort: 8000
@@ -177,8 +116,7 @@ spec:
                 - lightnode 
       containers:
       - name: react-frontend
-        #image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.24
-        image : ezelanza/front_end:1.0
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.24
         ports:
             - name: app-port
               containerPort: 3000
@@ -232,7 +170,7 @@ spec:
                 - light_node
       containers:
       - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat:4.42
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/LLMs_front_end:4.42
         ports:
             - name: app-port
               containerPort: 5000
@@ -286,7 +224,7 @@ spec:
                 - light_node
       containers:
       - name: chatopenai
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/chat-openai:1.8
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/openai:1.8
         ports:
             - name: app-port
               containerPort: 4000
@@ -346,7 +284,7 @@ spec:
                 - intensive-node 
       containers:
       - name: chatopenai
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b-optim:1.0
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b-hf-optim:1.0
         ports:
             - name: app-port
               containerPort: 4000
