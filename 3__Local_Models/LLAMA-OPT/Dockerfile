@@ -30,14 +30,14 @@ RUN conda create -n langchain python=3.10 -y && \
     conda init bash
 
 # Activate the Conda environment and install dependencies
-SHELL ["/bin/bash", "-c"]
-RUN source activate langchain && \
-    conda install -y -c conda-forge gxx gcc gdb sysroot_linux-64 && \
+SHELL ["conda", "run", "-n", "langchain", "/bin/bash", "-c"]
+RUN conda install -y -c conda-forge gxx gcc gdb sysroot_linux-64 && \
     git clone https://github.com/intel/intel-extension-for-transformers.git && \
     cd intel-extension-for-transformers && \
     git checkout 3e7e3530dcc0b6fb714cbb632fcb0d66ca2604c9 && \
     pip install -r requirements.txt && \
-    python setup.py install
+    python setup.py install && \
+    pip install uvicorn
 
 # Set environment variables
 ENV LD_PRELOAD="/opt/conda/envs/langchain/lib/libstdc++.so.6"

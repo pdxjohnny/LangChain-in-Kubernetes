@@ -129,10 +129,39 @@ kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
 
 # How was the optimization done?
 
-We performed a weightonlyoptimization thanks to Intel Extensions for transformers.
+We performed a weightonlyoptimization thanks to Intel Extensions for transformers. 
 
 These are the steps you should follow in order to replicate it.
 
+### 1. Quantize the model
+In order to have a model quantized we need to install ITREX
+```
+```
+Once ITREX is installed you should refer to the folder where each different optimization is done. In this case we will be using Text-generation folder:
+
+```
+
+```
+We have now to install the requirements needed to run the quantization
+```
+
+```
+We are now ready to perform the quantization. In this example the script will download the model from hugging face and will save the quantized model to ./saved_llama
+
+```
+
+```
+We now have the model quantized with the size reduced. It's now ready to be used as you normally use in a Hugging Face Pipeline.
+```
+
+```
+
+### 2. Inference
+
+Inference is also performed using ITREX so the only change we need to make to our inference code is:
+```
+
+```
 
 
 # TO BE MODIFIED
