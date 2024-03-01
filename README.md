@@ -129,7 +129,7 @@ kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
 
 # How was the optimization done?
 
-We performed a weightonlyoptimization thanks to Intel Extensions for transformers. 
+We performed a weightonlyoptimization thanks to Intel Extensions for transformers. LlaMa2-7b-hf will be used and this step will help to reduce the size of the model from ~30GB to 14GB. Thanks to techiques like quantization.
 
 These are the steps you should follow in order to replicate it.
 
