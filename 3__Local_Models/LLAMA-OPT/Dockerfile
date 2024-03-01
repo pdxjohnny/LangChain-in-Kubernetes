@@ -1,9 +1,10 @@
-FROM python:3.11-slim
+# Use the official Python 3.10 slim image as the base image
+FROM python:3.10-slim
 
 # Set the working directory in the container
-WORKDIR /app/
+WORKDIR /app
 
-# Install necessary system dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
     bzip2 \
@@ -15,33 +16,36 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install Miniconda
-RUN wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-            /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
-            rm /tmp/miniconda.sh
+ENV MINICONDA_VERSION="latest"
+ENV MINICONDA_INSTALLER="Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh"
+RUN wget -q "https://repo.anaconda.com/miniconda/${MINICONDA_INSTALLER}" -O /tmp/miniconda.sh && \
+    /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
+    rm /tmp/miniconda.sh
 
 # Set up conda into the environment
-ENV PATH /opt/conda/bin:$PATH
+ENV PATH="/opt/conda/bin:$PATH"
 
 # Create a new Conda environment named "langchain" with Python 3.10
-RUN /opt/conda/bin/conda create -n langchain python=3.10 -y
+RUN conda create -n langchain python=3.10 -y && \
+    conda init bash
 
-# Activate the Conda environment and clone the repository
-RUN /bin/bash -c "source /opt/conda/bin/activate langchain && \
-    export LD_PRELOAD=/opt/conda/envs/langchain/lib/libstdc++.so.6 && \
+# Activate the Conda environment and install dependencies
+SHELL ["/bin/bash", "-c"]
+RUN source activate langchain && \
+    conda install -y -c conda-forge gxx gcc gdb sysroot_linux-64 && \
     git clone https://github.com/intel/intel-extension-for-transformers.git && \
     cd intel-extension-for-transformers && \
+    git checkout 3e7e3530dcc0b6fb714cbb632fcb0d66ca2604c9 && \
     pip install -r requirements.txt && \
-    python3 setup.py install"
+    python setup.py install
 
-# Set the entrypoint to a bash shell
-ENTRYPOINT ["/bin/bash"]
-
-
-# Change directory to the app directory
+# Set environment variables
+ENV LD_PRELOAD="/opt/conda/envs/langchain/lib/libstdc++.so.6"
+# Set the working directory to /app
 WORKDIR /app/
 
 # Expose port 8000
 EXPOSE 8000
 
-# Command to run the application
-CMD ["exec", "uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
+# Set the entrypoint to run the application
+CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]

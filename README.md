@@ -122,7 +122,7 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 This is where you create all the containers and te configuration descripted on the .yaml file
 
 ### 4.4 ACCESS! 
-
+The services are expossed to port :80
 ```
 kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
 ```
