@@ -11,3 +11,4 @@ pipe= pipeline(task="text-generation", model=local_model, tokenizer=local_tokeni
 
 #Pipeline to be consumed by Langserve API
 llm_pipeline = HuggingFacePipeline(pipeline=pipe)
+

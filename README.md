@@ -85,7 +85,27 @@ And finally push it to your repository
 docker push <username>/front_end:1.0
 ```
 ## 4. Set up your kubernetes enviroment
-In our scenario we will be using Intel Kubernetes Service (IKS), cloud.intel.com. Follow this guide to connect to your enviroment https://console.cloud.intel.com/docs/guides/k8s_guide.html 
+You can deploy your cluster on any cloud provider or you can go to cloud.intel.com and get your enviroment running on the latest Intel Xeon or gaudi generations. Follow this guide to connect to your enviroment https://console.cloud.intel.com/docs/guides/k8s_guide.html.
+
+In this example we will be using Amazon EFS as a file server
+
+The configuration files for the cluster are the following:
+2. **Yaml files**:
+   - **deployment.yaml**: This yaml file contains the configuration to deploy the containers, create the services to each of them and set environments to be used:
+   -- **ServiceAccount** : Since the LLM back_end needs to know the ip address of each service in order to forward the requests.
+   -- **Persistent Volume/Claim**:
+   -- **Image Containers**:
+   -- **Worker assigment**: 
+
+   - **efs_storage.yamlr**: In this demo we are using amazon EFS as file server. It associates the external File server with the cluster to be used later for the containers.
+   Please modify it according to your File server
+```csi:
+    driver: efs.csi.aws.com
+    volumeHandle: <<<YOUR FILE SERVER NAME>>
+```
+   - **ingress.yaml**: This file configures the ingress rules for the NGNIX controller.
+   --**APIS**
+   --**Front_end**
 
 #export HTTPS_PROXY=http://proxy-chain.intel.com:912
 
@@ -149,8 +169,6 @@ This command will start both containers at each port. Front end will be using po
 
 You should now be able to see the chatbot interface on http://localhost:3000
 
-# Let's move to the kubernetes part
-The solution counts with a yaml file which deploys these 2 containers + ingress
 
 # 3 Optimization step
 The front end can interact with both optimized and non-optimzed models. You can find in the folder chat-backend Optimized the model already optimized.
@@ -185,8 +203,6 @@ NOTE: This step can take a while depending on your hardware specifications.
             --output_dir "saved_results" 
     ```
 
-# OPTIONAL If you have AWS ECR
-
 # Deploy it on Kubernetes
 
 Create a network Load balancer
@@ -216,43 +232,6 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 # STEPS FROM 
 https://aws.amazon.com/blogs/containers/exposing-kubernetes-applications-part-3-nginx-ingress-controller/
 
-# FORWARDING A LA PC PARA QUE PUEDA CORRERLO LOCAL
-#Make both ports forwared
-
-
-
-to test 
-kubectl port-forward -n default pod/chat-backend-deployment-8595df5f46-cjqh5 8090:5000
-
-# RUN INGRESS
-
-# RUN PODS
-
-# DELPLY PODS
-
-# TEST INTERNALLY
-# OPTIMIZATION 
-git clone https://github.com/intel/intel-extension-for-transformers.git
-
-cd examples/huggingface/pytorch/text-generation/quantization
-
-python3 -m venv env_optim
-
-source env_optim/bin/activate
-
-pip install -r requirements.txt
-
-Perfom the optimization
-
-# Steps to create langserve
-## 1 Install langchain-cli, this will enable you to use the cli and install langchain templates easily
-
-## 2 There ara multiple templates with examples,in this case we will start with a clean environme but the tempalte will generate for us the files needed 
-
-langchain app new chat-local 
-
-It generates the files we need:
-Important thing to mention is that it's using langserve api, which will make it easier
 
 
 

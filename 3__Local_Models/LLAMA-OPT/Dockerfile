@@ -27,6 +27,7 @@ RUN /opt/conda/bin/conda create -n langchain python=3.10 -y
 
 # Activate the Conda environment and clone the repository
 RUN /bin/bash -c "source /opt/conda/bin/activate langchain && \
+    export LD_PRELOAD=/opt/conda/envs/langchain/lib/libstdc++.so.6 && \
     git clone https://github.com/intel/intel-extension-for-transformers.git && \
     cd intel-extension-for-transformers && \
     pip install -r requirements.txt && \

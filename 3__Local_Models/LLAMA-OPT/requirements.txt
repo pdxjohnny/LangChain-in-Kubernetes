@@ -5,10 +5,6 @@ langchain_community
 sentencepiece
 langserve
 langchain
-pypdf
-sse_starlette
-faiss-cpu
-chainlit
 fastapi
 pydantic==1.10.13
 uvicorn
