@@ -15,7 +15,7 @@ const Options = (props) => {
       id: 2 
     },
 
-    { text: "Use external API(OpenAI)", handler: props.actionProvider.setExternalState , id: 3 },
+    { text: "Use external API", handler: props.actionProvider.setExternalState , id: 3 },
   ];
 
   const buttonsMarkup = options.map((option) => (
