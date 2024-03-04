@@ -7,15 +7,15 @@ class MessageParser {
     console.log(message);
     const lowercase = message.toLowerCase();
 
-    if (lowercase.includes("rag")) {
-      this.actionProvider.setRagState();
-    } else if (lowercase.includes("optimized")) {
+    if (lowercase.includes("optimized")) {
       this.actionProvider.setOptimizedState();
     } else if (lowercase.includes("external")) {
       this.actionProvider.setExternalState();
     } else if (lowercase.includes("start")) {
       this.actionProvider.startAgain();
-      
+    } else if (lowercase.includes("local")) {
+      this.actionProvider.setLocalState();
+        
     } else {
       this.actionProvider.chatToModelTrigger(lowercase);
     }

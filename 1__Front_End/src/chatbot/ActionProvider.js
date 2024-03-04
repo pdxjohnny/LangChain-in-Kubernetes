@@ -33,7 +33,7 @@ class ActionProvider {
     try {
       console.log('Message sent to External API');  
       // Message sent to API created by Langchain API
-      const response = await connection('http://localhost:8000/apiopenai', {
+      const response = await connection('http://localhost:8000/api_openai', {
         method: 'POST',
         headers: {
          'Accept': 'application/json',
@@ -92,7 +92,7 @@ class ActionProvider {
   chatToLocal = async (message) => {
     try {
       console.log('Message sent to local LLaMa2');  
-      const response = await fetch('http://localhost:8000/api_local_falcon_non', {
+      const response = await fetch('http://localhost:8000/api_local_llama_non', {
         method: 'POST',
         headers: {
          'Accept': 'application/json',
@@ -119,31 +119,6 @@ class ActionProvider {
     }
   };
 
-  chatToRag = async (message) => {
-    try {
-      console.log('Message sent to RAG');  
-      const response = await connection('http://146.152.232.54/api', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-        body: message,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message to the API');
-      }
-
-      const result = await response.text();
-      console.log('Message sent successfully:', result);
-
-      const chatbotMessage = this.createChatBotMessage(result);
-      this.addMessageToState(chatbotMessage);
-    } catch (error) {
-      console.error('Error in chatToPython:', error.message);
-    }
-  };
-
   setExternalState = () => {
     const message = this.createChatBotMessage("Great! Please make your question to the External API (OpenAI");
       this.addMessageToState(message);
@@ -151,17 +126,6 @@ class ActionProvider {
     this.setState((prev) => ({
       ...prev,
       external_mode: true,
-      
-    }));
-  };
-  
-  setRagState = () => {
-    const message = this.createChatBotMessage("Great! Please add your question to the RAG model (Docs were previously updated)");
-      this.addMessageToState(message);
-
-    this.setState((prev) => ({
-      ...prev,
-      rag_mode: true,
       
     }));
   };
