@@ -121,45 +121,79 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 ### 4.3 Deployment
 This is where you create all the containers and te configuration descripted on the .yaml file
 
-### 4.4 ACCESS! 
-The services are expossed to port :80
+### 4.4 LET'S ACCESS! 
+The services are exposed to Port:80, for demo purposes we will be forwarding them to our localhost:8000
 ```
 kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
 ```
 
+![Chat](tmp/chat.png)
+
+
 # How was the optimization done?
 
-We performed a weightonlyoptimization thanks to Intel Extensions for transformers. LlaMa2-7b-hf will be used and this step will help to reduce the size of the model from ~30GB to 14GB. Thanks to techiques like quantization.
+We performed a weightonlyoptimization thanks to Intel Extensions for transformers. LlaMa2-7b-hf will be used and this step will help to reduce the size of the model from ~30GB to ~7GB. Thanks to techniques like quantization.
 
 These are the steps you should follow in order to replicate it.
 
+Before starting you should go ahead and clone the repository:
+```
+git clone https://github.com/intel/intel-extension-for-transformers
+```
+
+In our case, we will be using a new conda environment (Refer to xxx to install conda in your env)
+
+```
+conda create -n langchain python=3.10
+```
+
+
 ### 1. Quantize the model
 In order to have a model quantized we need to install ITREX
-```
-```
-Once ITREX is installed you should refer to the folder where each different optimization is done. In this case we will be using Text-generation folder:
 
 ```
+cd intel-extension-for-transformers 
+pip install -r requirements.txt
+python setup.py install
 
 ```
-We have now to install the requirements needed to run the quantization
-```
+Once ITREX is installed you should refer to the folder where each different optimization is performed and install their requirements. In this case, we will be using Text-generation folder to quantize a Hugging Face model, you can navigate to other formats like Pytorch/TensorFlow:
 
 ```
-We are now ready to perform the quantization. In this example the script will download the model from hugging face and will save the quantized model to ./saved_llama
+cd examples/huggingface/pytorch/text-generation/quantization
+pip install -r requirements.txt
+```
+We are now ready to perform the quantization. Since ITREX uses gcp libraries you might need to expose
 
 ```
+find $CONDA_PREFIX | grep libstdc++.so.6
+export LD_PRELOAD=/home/tensorflow/miniconda3/envs/langchain/lib/libstdc++.so.6
+
+```
+Let's perform the quantization!
+The folder has a script (run_generation.py) which downloads the model from HuggingFace(In this case we will be using https://huggingface.co/meta-llama/Llama-2-7b-chat-hf), perform the quantization and saves the model in the same Hugging Face format for future inference.
+
+```
+python run_generation.py --model meta-llama/Llama-2-7b-hf  --output_dir ./saved_llama     --woq
 
 ```
 We now have the model quantized with the size reduced. It's now ready to be used as you normally use in a Hugging Face Pipeline.
-```
 
 ```
+from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
 
-### 2. Inference
+#Install ITREX in order to use the API
+from intel_extension_for_transformers.transformers import AutoModelForCausalLM
 
-Inference is also performed using ITREX so the only change we need to make to our inference code is:
-```
+model_path = “path/to/model/”
+
+optimized_model = AutoModelForCausalLM.from_pretrained(model_path,use_neural_speed=False,)
+
+local_tokenizer=LlamaTokenizer.from_pretrained(model_path)
+
+pipe= pipeline(task="text-generation", model=optimized_model, tokenizer=local_tokenizer,trust_remote_code=True, max_new_tokens=100, repetition_penalty=1.1, 	 model_kwargs={"max_length": 1200, "temperature": 0.01}) 
+
+llm_pipeline = HuggingFacePipeline(pipeline=pipe)
 
 ```
 
