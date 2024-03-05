@@ -1,11 +1,15 @@
-langchain-openai
+transformers
+sentencepiece
+langchain_community
+sentencepiece
 langserve
 langchain
 fastapi
 pydantic==1.10.13
 uvicorn
-openai
+flask-cors
+peft
+protobuf
 sse_starlette
-
 
 

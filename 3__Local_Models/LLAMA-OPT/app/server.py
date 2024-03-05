@@ -32,7 +32,7 @@ async def redirect_root_to_docs():
 
 add_routes(app, 
            prompt|llm_pipeline,
-           path='/llama_optim_chain')
+           path='/chain_llama_optim')
 
 if __name__ == "__main__":
     import uvicorn
