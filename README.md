@@ -1,10 +1,10 @@
 # DEMO for deploying a QA chatbot in Kubernetes
 
-Welcome to the repository for deploying a QA chatbot in Kubernetes using open-source tools.
+Welcome to the repository dedicated to deploying a QA chatbot in Kubernetes utilizing open-source tools.
 
-This repository is intented to share a STEP-BY-STEP Kubernetes implementation for a chatbot using Open source tools. This doc will guide you to each step from creating the containers to the lunching a kubernetes server.
+This repository aims to provide a comprehensive, step-by-step guide for implementing a chatbot on Kubernetes using open-source tools. This document will walk you through each stage, from container creation to launching a Kubernetes server.
 
-Since it's using local models we will rely on AWS File server(EFS) and container registry (ECR) for practical purposes. You can refer to your own File server and your own kubernetes cluster provider.
+As we are employing local models, our practical setup will rely on AWS File Server (EFS) and Container Registry (ECR). However, you can substitute these with your preferred file server and Kubernetes cluster provider.
 
 # Description of the architecture
 
