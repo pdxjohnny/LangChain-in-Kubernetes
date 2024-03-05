@@ -81,21 +81,24 @@ async def process_text_data(question: Data,user_agent: str = Header(None)):
 @app.post("/api_openai")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:
-        user_question= str(question.question)
+        #user_question= str(question.question)
         
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    "You are a highly educated person who loves to use big words. "
-                    + "You are also concise. Never answer in more than three sentences.",
-                ),
-                ("human", user_question),
-            ]       
-        ).format_messages()     
+        #prompt = ChatPromptTemplate.from_messages(
+        #    [
+        #        (
+        #            "system",
+        #           "You are a highly educated person who loves to use big words. "
+        #            + "You are also concise. Never answer in more than three sentences.",
+        #        ),
+        #        ("human", user_question),
+        #    ]       
+        #).format_messages()     
         
+        user_question= question.question
+
+        result=openai_llm.invoke({"question": user_question})
                 # Pass the extracted question
-        result=openai_llm.invoke(prompt)
+        #result=openai_llm.invoke(prompt)
         
         return result.content
     

@@ -2,7 +2,7 @@ langchain-openai
 langserve
 langchain
 fastapi
-pydantic
+pydantic==1.10.13
 uvicorn
 openai
 sse_starlette

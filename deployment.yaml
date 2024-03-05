@@ -166,7 +166,7 @@ spec:
                 - light_node
       containers:
       - name: llms-front-end
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llms_front_end:1.6
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llms_front_end:1.8
         ports:
             - name: app-port
               containerPort: 5000
@@ -220,7 +220,7 @@ spec:
                 - light_node
       containers:
       - name: openai
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/openai:1.4
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/openai:1.5
         ports:
             - name: app-port
               containerPort: 4000
