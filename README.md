@@ -126,6 +126,7 @@ The services are exposed to Port:80, for demo purposes we will be forwarding the
 ```
 kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
 ```
+Goto http://localhost:8000/
 
 ![Chat](tmp/chat.png)
 
