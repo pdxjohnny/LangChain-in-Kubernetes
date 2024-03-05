@@ -29,9 +29,9 @@ def kubernetes_ipv4_address_for_service(service_name, namespace='default'):
         return service_cluster_ip
 
 # Get services ip
-openai_svc = kubernetes_ipv4_address_for_service("chatopenai-main-service")
-llama_non_svc = kubernetes_ipv4_address_for_service("llama-non-service")
-llama_optim_svc = kubernetes_ipv4_address_for_service("llama7b-opt-service")
+openai_svc = kubernetes_ipv4_address_for_service("openai-service")
+llama_non_svc = kubernetes_ipv4_address_for_service("llama7b-non-optimized-service")
+llama_optim_svc = kubernetes_ipv4_address_for_service("llama7b-optimized-service")
 
 class Data(BaseModel):
     question: str
@@ -46,9 +46,9 @@ app.add_middleware(
     allow_headers=["*"],  # Add comma here
     allow_credentials=False,
 )
-openai_llm = RemoteRunnable("http://"+openai_svc+":80/openai_api").with_types(input_type=str)
-llama_chain = RemoteRunnable("http://"+llama_non_svc+":80/llama_chain").with_types(input_type=str)
-llama_optim_chain = RemoteRunnable("http://"+llama_optim_svc+":80/llama_optim_chain").with_types(input_type=str)
+openai_llm = RemoteRunnable("http://"+openai_svc+":80/chain_api_openai").with_types(input_type=str)
+llama_chain = RemoteRunnable("http://"+llama_non_svc+":80/chain_llama_non").with_types(input_type=str)
+llama_optim_chain = RemoteRunnable("http://"+llama_optim_svc+":80/chain_llama_optim").with_types(input_type=str)
 
 @app.post("/api_local_llama_optim")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
@@ -62,9 +62,9 @@ async def process_text_data(question: Data,user_agent: str = Header(None)):
     except Exception as e:
         error_msg = f"Error: {str(e)}"
         print(error_msg)
-        raise HTTPException(status_code=500, detail=error_msg)
+        raise HTTPException(stacdus_code=500, detail=error_msg)
     
-@app.post("/api_local_llama")
+@app.post("/api_local_llama_non")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:
         user_question= question.question
@@ -78,8 +78,7 @@ async def process_text_data(question: Data,user_agent: str = Header(None)):
         print(error_msg)
         raise HTTPException(status_code=500, detail=error_msg)
     
- 
-@app.post("/apiopenai")
+@app.post("/api_openai")
 async def process_text_data(question: Data,user_agent: str = Header(None)):
     try:
         user_question= str(question.question)

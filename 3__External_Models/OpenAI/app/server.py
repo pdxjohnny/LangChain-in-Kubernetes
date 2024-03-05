@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 #from langchain.chat_models import ChatOpenAI
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from fastapi.middleware.cors import CORSMiddleware
 from langserve import add_routes
-from langchain import PromptTemplate
+from langchain.prompts import PromptTemplate
 
 app = FastAPI()
 # Set up CORS middleware to allow requests from any origin
@@ -41,7 +41,7 @@ model = ChatOpenAI(openai_api_key=OPENAI_KEY)
 add_routes(
     app,
     prompt|model,
-    path="/openai_api",
+    path="/chain_api_openai",
 )
 
 if __name__ == "__main__":

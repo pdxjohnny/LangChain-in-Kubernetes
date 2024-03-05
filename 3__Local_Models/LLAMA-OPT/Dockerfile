@@ -1,9 +1,7 @@
 # Use the official Python 3.10 slim image as the base image
 FROM python:3.10-slim
 
-# Set the working directory in the container
-WORKDIR /app
-
+COPY . .
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
@@ -30,22 +28,24 @@ RUN conda create -n langchain python=3.10 -y && \
     conda init bash
 
 # Activate the Conda environment and install dependencies
+# Activate the Conda environment and install dependencies
 SHELL ["conda", "run", "-n", "langchain", "/bin/bash", "-c"]
+
 RUN conda install -y -c conda-forge gxx gcc gdb sysroot_linux-64 && \
     git clone https://github.com/intel/intel-extension-for-transformers.git && \
     cd intel-extension-for-transformers && \
     git checkout 3e7e3530dcc0b6fb714cbb632fcb0d66ca2604c9 && \
-    pip install -r requirements.txt && \
-    python setup.py install && \
-    pip install uvicorn
+    pip3 install -r requirements.txt && \
+    python setup.py install
 
 # Set environment variables
 ENV LD_PRELOAD="/opt/conda/envs/langchain/lib/libstdc++.so.6"
-# Set the working directory to /app
-WORKDIR /app/
+
+# Install additional requirements from the requirements.txt file within the Conda environment
+RUN pip install -r requirements.txt
 
 # Expose port 8000
 EXPOSE 8000
 
 # Set the entrypoint to run the application
-CMD ["uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/opt/conda/bin/conda", "run", "-n", "langchain", "uvicorn", "app.server:app", "--host", "0.0.0.0", "--port", "8000"]

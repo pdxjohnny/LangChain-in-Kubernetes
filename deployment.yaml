@@ -30,21 +30,18 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: llama-non-deployment
+  name: llama7b-non-optimized
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: chat
-      tier: backend
-      track: stable
+      tier: llama7b-non-optimized
   template:
     metadata:
       labels:
         app: chat
-        tier: backend
-        track: stable
-      name: llama-non-pod
+        tier: llama7b-non-optimized
     spec:
       affinity:
         nodeAffinity:
@@ -54,13 +51,13 @@ spec:
               - key: eks.amazonaws.com/nodegroup
                 operator: In
                 values:
-                - intensive-node 
+                - intensive_node 
       containers:
-        - name: chat
-          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b-hf-NON-optim:2.19
+        - name: llama7b-non-optimized
+          image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b_hf_non_opt:1.0
           ports:
             - name: app-port
-              containerPort: 8000
+              containerPort: 5005
           volumeMounts:
             - name: efs-volume-1
               mountPath: /efs_mounted
@@ -75,14 +72,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: llama-non-service
+  name: llama7b-non-optimized-service
   labels:
-    app.kubernetes.io/name: llama-non-service
+    app.kubernetes.io/name: llama7b-non-optimized-service
 spec:
   type: ClusterIP
   selector:
     app: chat
-    tier: backend
+    tier: llama7b-non-optimized
   ports:
     - name: svc-port
       port: 80
@@ -113,10 +110,10 @@ spec:
               - key: eks.amazonaws.com/nodegroup
                 operator: In
                 values:
-                - lightnode 
+                - light_node 
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.24
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.1
         ports:
             - name: app-port
               containerPort: 3000
@@ -144,18 +141,18 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chat-main
+  name: llms-front-end
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: chat
-      tier: chat-main
+      tier: llms-front-end
   template:
     metadata:
       labels:
         app: chat
-        tier: chat-main
+        tier: llms-front-end
     spec:
       affinity:
         nodeAffinity:
@@ -164,13 +161,12 @@ spec:
             - matchExpressions:
                 # THIS HAS TO BE CHANGED IN ORDER TO SET WITH YOUR NODE
               - key: eks.amazonaws.com/nodegroup
-              #- key : iks-vm-u22-cd-wk-1-28-4-23-11-24  
                 operator: In
                 values:
                 - light_node
       containers:
-      - name: chat-main
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/LLMs_front_end:4.42
+      - name: llms-front-end
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llms_front_end:1.6
         ports:
             - name: app-port
               containerPort: 5000
@@ -181,14 +177,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chat-main-service
+  name: llms-front-end-service
   labels:
-    app.kubernetes.io/name: chat-main-service
+    app.kubernetes.io/name: llms-front-end-service
 spec:
   type: ClusterIP
   selector:
     app: chat
-    tier: chat-main
+    tier: llms-front-end
   ports:
     - name: svc-port
       port: 80
@@ -200,18 +196,18 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chatopenai-main
+  name: openai
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: chat
-      tier: chatopenai-main
+      tier: openai
   template:
     metadata:
       labels:
         app: chat
-        tier: chatopenai-main
+        tier: openai
     spec:
       affinity:
         nodeAffinity:
@@ -223,8 +219,8 @@ spec:
                 values:
                 - light_node
       containers:
-      - name: chatopenai
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/openai:1.8
+      - name: openai
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/openai:1.4
         ports:
             - name: app-port
               containerPort: 4000
@@ -242,14 +238,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: chatopenai-main-service
+  name: openai-service
   labels:
-    app.kubernetes.io/name: chatopenai-main-service
+    app.kubernetes.io/name: openai-service
 spec:
   type: ClusterIP
   selector:
     app: chat
-    tier: chatopenai-main
+    tier: openai
   ports:
     - name: svc-port
       port: 80
@@ -260,18 +256,18 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: llama7b-optim
+  name: llama7b-optimized
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: chat
-      tier: llama7b-optim
+      tier: llama7b-optimized
   template:
     metadata:
       labels:
         app: chat
-        tier: llama7b-optim
+        tier: llama7b-optimized
     spec:
       affinity:
         nodeAffinity:
@@ -281,10 +277,10 @@ spec:
               - key: eks.amazonaws.com/nodegroup
                 operator: In
                 values:
-                - intensive-node 
+                - intensive_node 
       containers:
-      - name: chatopenai
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b-hf-optim:1.0
+      - name: llama7b-optimized
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b_hf_optim:1.0
         ports:
             - name: app-port
               containerPort: 4000
@@ -302,14 +298,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: llama7b-opt-service
+  name: llama7b-optimized-service
   labels:
-    app.kubernetes.io/name: llama7b-opt-service
+    app.kubernetes.io/name: llama7b-optimized-service
 spec:
   type: ClusterIP
   selector:
     app: chat
-    tier: llama7b-optim
+    tier: llama7b-optimized
   ports:
     - name: svc-port
       port: 80

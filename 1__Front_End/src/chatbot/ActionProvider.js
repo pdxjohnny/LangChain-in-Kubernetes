@@ -13,8 +13,6 @@ class ActionProvider {
     console.log(this.state.rag_mode);
     if (this.state.rag_mode){
       this.chatToRag(message);
-    } else if (this.state.opt_model){
-      this.chatToRag(message);
     }else if (this.state.external_mode){
       this.chatToExternal(message);
     }else if (this.state.local_mode){
@@ -165,6 +163,7 @@ class ActionProvider {
       ...prev,
       opt_model: false,
     }));
+    
   };
 
   addMessageToState = (message) => {

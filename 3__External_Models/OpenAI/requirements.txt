@@ -1,10 +1,11 @@
-langchain_community
+langchain-openai
 langserve
 langchain
 fastapi
-pydantic<2.0
+pydantic
 uvicorn
 openai
+sse_starlette
 
 
 

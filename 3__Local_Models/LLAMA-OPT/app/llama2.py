@@ -1,7 +1,7 @@
 from transformers import pipeline, LlamaTokenizer
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
 from intel_extension_for_transformers.transformers import AutoModelForCausalLM
-model_path = '/app/llama2'
+model_path = "/efs_mounted/Models/Llama-7b-hf-OPTIM"
 local_model = AutoModelForCausalLM.from_pretrained(
     model_path,
     use_neural_speed=False,
