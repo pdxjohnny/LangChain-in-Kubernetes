@@ -90,18 +90,13 @@ You can deploy your cluster on any cloud provider, or you can visit cloud.intel.
 
 The configuration files for the cluster are the following:
 ###    - **Configuration files (yaml)**: 
-   - **deployment.yaml**: This yaml file contains the configuration to deploy the containers, create the services to each of them and set environments to be used:
-        - **ServiceAccount***: Since the LLM back_end needs to know the ip address of each service in order to forward the requests.
-        - **Persistent Volume/Claim**:
-        - **Image Containers**:
-        - **Worker assigment**: 
+   - **deployment.yaml**: This yaml file contains the configuration to perform deployments, and creates the services to each of them and set environments to be used:
+        - **ServiceAccount**: Since the LLM back_end needs to know the ip address of each service in order to forward the requests. ServiceAccount and roles are created in order to capture the svc ip address assigned of each BackEnd LLM. This will only be used by the llm_front_end to forward each request.
+        - **VolumeMounts**: As mentioned each local LLM will be stored on an File server to be consumed when pods containing local models are lunched. VolumeMounts basicaly mounts the File server within the pod.Please modify it according to your File server
+        - **Image Containers**: URL of where containers were pushed.
+        - **Worker assigment**: This demo uses 2 different worker groups (light/intensive), each deployment has a nodeAffinity corresponding to the load that would be required. In this DEMO it's configured to use EKS node groups.
+    - **Persistent Volume/Claim**:
 
-   - **efs_storage.**: In this demo we are using amazon EFS as file server. It associates the external File server with the cluster to be used later for the containers.
-   Please modify it according to your File server
-```csi:
-    driver: efs.csi.aws.com
-    volumeHandle: <<<YOUR FILE SERVER NAME>>
-```
    - **ingress.yaml**: This file configures the ingress rules for the NGNIX controller.
    --**APIS**
    --**Front_end**
