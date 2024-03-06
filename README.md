@@ -88,11 +88,10 @@ docker push <username>/front_end:1.0
 ## 4. Set up your kubernetes enviroment
 You can deploy your cluster on any cloud provider, or you can visit cloud.intel.com to set up your environment on the latest Intel Xeon or Gaudi generations. Follow this guide to connect to your environment :  https://console.cloud.intel.com/docs/guides/k8s_guide.html.
 
-
 The configuration files for the cluster are the following:
-2. **Yaml files**:
+###    - **Configuration files (yaml)**: 
    - **deployment.yaml**: This yaml file contains the configuration to deploy the containers, create the services to each of them and set environments to be used:
-   - **ServiceAccount** : Since the LLM back_end needs to know the ip address of each service in order to forward the requests.
+   - +ServiceAccount+ : Since the LLM back_end needs to know the ip address of each service in order to forward the requests.
    - **Persistent Volume/Claim**:
    - **Image Containers**:
    - **Worker assigment**: 
