@@ -67,7 +67,7 @@ You should now be able to see both containers on your environment.
     docker images
 ```
 
-## 3. Pull containers to the registry
+## 3. Push containers to the registry
 Your containers need to reside somewhere accessible so that they can be downloaded when the Kubernetes cluster is created.
 
 There are several options available, including Amazon ECR and Docker HUB.
@@ -86,9 +86,8 @@ And finally push it to your repository
 docker push <username>/front_end:1.0
 ```
 ## 4. Set up your kubernetes enviroment
-You can deploy your cluster on any cloud provider or you can go to cloud.intel.com and get your enviroment running on the latest Intel Xeon or gaudi generations. Follow this guide to connect to your enviroment https://console.cloud.intel.com/docs/guides/k8s_guide.html.
+You can deploy your cluster on any cloud provider, or you can visit cloud.intel.com to set up your environment on the latest Intel Xeon or Gaudi generations. Follow this guide to connect to your environment :  https://console.cloud.intel.com/docs/guides/k8s_guide.html.
 
-In this example we will be using Amazon EFS as a file server
 
 The configuration files for the cluster are the following:
 2. **Yaml files**:
