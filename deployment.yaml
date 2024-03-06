@@ -113,7 +113,7 @@ spec:
                 - light_node 
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.1
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.2
         ports:
             - name: app-port
               containerPort: 3000
@@ -283,7 +283,7 @@ spec:
         image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/llama7b_hf_optim:1.2
         ports:
             - name: app-port
-              containerPort: 4000
+              containerPort: 8000
         volumeMounts:
             - name: efs-volume-1
               mountPath: /efs_mounted

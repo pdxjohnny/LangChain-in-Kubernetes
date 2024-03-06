@@ -156,6 +156,16 @@ class ActionProvider {
 
     this.setState((prev) => ({
       ...prev,
+      external_mode: false,
+      
+    }));
+    this.setState((prev) => ({
+      ...prev,
+      local_mode: false,
+      
+    }));
+    this.setState((prev) => ({
+      ...prev,
       rag_mode: false,
       
     }));
