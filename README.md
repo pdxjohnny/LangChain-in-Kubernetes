@@ -40,8 +40,9 @@ git clone https://github.com/ezelanza/LangChain-in-Kubernetes.git
 
 ## 2. Create Containers
 
-After clonning the projetc go to each Folder to create each container (docker). There is a dockerfile on each folder with the instructions (In this case we will add it as an Intel processor, your should change according your platform) 
-*NOTE BE SURE TO HAVE YOUR DOCKER ENGINE INSTALLED* Refer to https://www.docker.com 
+After cloning the project, navigate to each folder to create each container (docker). There is a Dockerfile in each folder with the instructions. In this case, we will BUILD it to run in an Intel processor, but you should change (--platform linux/amd64) it according to your platform.
+
+*NOTE : BE SURE TO HAVE YOUR DOCKER ENGINE INSTALLED* Refer to https://www.docker.com 
 
 Create REACT front end container
 ```{python}
@@ -51,26 +52,27 @@ Create REACT front end container
 Create Python Front_end_LLM container
 ```{python}
     cd 2__Models_FE
-    docker build --platform linux/amd64 -t models_front_end:latest .
+    docker build --platform linux/amd64 -t llms_front_end:latest .
 ```
 
-
 Create Python LLM container for each model (In this example for LlaMa7B non optimized).
-Note : Repeat this step to all the containers you'd like to create
+*Note : Repeat this step to all the containers you'd like to create*
+
 ```{python}
     cd 3__Local_Models/LLAMA-NON 
-    docker build --platform linux/amd64 -t llama-7b-non:latest .
+    docker build --platform linux/amd64 -t llama7b-non-optimized:latest .
 ```
 You should now be able to see both containers on your environment.
 ```{python}
     docker images
 ```
+
 ## 3. Pull containers to the registry
-Your containers should live somewhere in order to be downloaded when the Kubernetes cluster will be created.
+Your containers need to reside somewhere accessible so that they can be downloaded when the Kubernetes cluster is created.
 
-There are several options to use including Amazon ECR. 
+There are several options available, including Amazon ECR and Docker HUB.
 
-In this case we will use Docker HUB. Refer to docker documentation depending on the OS you're using to get instructions to create your repository.
+In this case, we will use Docker Hub. Refer to Docker documentation based on the operating system you're using to get instructions on creating your repository.
 
 ```
 docker login
