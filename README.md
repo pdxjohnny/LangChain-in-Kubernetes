@@ -16,22 +16,21 @@ The architecture for this implementation is outlined below:
    The front end is built using `react-chatbot-kit`, a versatile and customizable chatbot framework. You can find more information about `react-chatbot-kit` [here](https://www.npmjs.com/package/react-chatbot-kit).
 
 1. **Front End for different models**:
-   Since we will be using multiple LLMs, we would need to create 1 LLMs "front_end" to centralize all the requests to after send them to where each particular model is instantiated.
+   Since we will be using multiple LLMs, we would need to create one LLM 'front-end' to centralize all the requests and then send them to where each particular model is instantiated.
 
 2. **Models**:
    This implementation relies on three different models:
-   - **Local LLaMa2_7B**: This model is downloaded from Meta and stored on a file server.
-   - **Local Optimized LLaMa2_7B**: An optimized version of the LLaMa2_7B model created using ITREX (details on optimization in the XXX Optimization section). This optimized model is also stored on a file server (EFS).
-   - **Local LlaMa.cpp**: An optimized version of the `llama cpp` model.
-   - **External Paid API**: In this demo, we demonstrate the integration with OpenAI's paid API.
+   - **Local LLaMa2_7B**: llama-2-7b-chat-hf model downloaded from Hugging Face (https://huggingface.co/meta-llama/Llama-2-7b-chat-hf)  and stored on a file server.
+   - **Local Optimized LLaMa2_7B**: An optimized version of the LLaMa2_7B model created using ITREX (details on optimization in the "How was the optimization done?" section). This optimized model is also stored on a file server (EFS).
+   - **External Paid API**: OpenAI's paid API.
 
 # Step by step
 
 The proposed architecture serves as a foundational guide for deploying multiple Language Model Models (LLMs) in a Kubernetes environment.
 
-Feel free to explore the provided resources and adapt the implementation to your specific use case. 
+Feel free to explore the provided resources and adapt the implementation to your specific use case.
 
-Let's bring your chatbot to life in Kubernetes!
+Let's bring your chatbot to life on Kubernetes!
 
 
 ## 1. Clone the repository
