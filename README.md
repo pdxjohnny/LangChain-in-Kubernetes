@@ -91,10 +91,10 @@ You can deploy your cluster on any cloud provider, or you can visit cloud.intel.
 The configuration files for the cluster are the following:
 ###    - **Configuration files (yaml)**: 
    - **deployment.yaml**: This yaml file contains the configuration to perform deployments, and creates the services to each of them and set environments to be used:
-        - **ServiceAccount**: Since the LLM back_end needs to know the ip address of each service in order to forward the requests. ServiceAccount and roles are created in order to capture the svc ip address assigned of each BackEnd LLM. This will only be used by the llm_front_end to forward each request.
-        - **VolumeMounts**: As mentioned each local LLM will be stored on an File server to be consumed when pods containing local models are lunched. VolumeMounts basicaly mounts the File server within the pod.Please modify it according to your File server
+        - **ServiceAccount**: The ServiceAccount and roles are created specifically to capture the IP address assigned to each BackEnd LLM service. This information is necessary for the LLM back_end to effectively forward incoming requests. This setup is exclusively utilized by the llm_front_end to facilitate the forwarding process for each request.
+        - **VolumeMounts**: As previously mentioned, each local LLM will be stored on a file server to be consumed when pods containing local models are launched. VolumeMounts are utilized to mount the file server within the pod. Please adjust the configuration according to your file server setup.
         - **Image Containers**: URL of where containers were pushed.
-        - **Worker assigment**: This demo uses 2 different worker groups (light/intensive), each deployment has a nodeAffinity corresponding to the load that would be required. In this DEMO it's configured to use EKS node groups.
+        - **Worker assigment**: This demonstration utilizes two distinct worker groups, namely "light" and "intensive". Each deployment is associated with a nodeAffinity that corresponds to the anticipated load requirements. In this demo setup, it's configured to utilize EKS node groups for managing the worker nodes.
     - **Persistent Volume/Claim**:
 
    - **ingress.yaml**: This file configures the ingress rules for the NGNIX controller.
