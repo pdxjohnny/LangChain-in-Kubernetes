@@ -91,10 +91,10 @@ You can deploy your cluster on any cloud provider, or you can visit cloud.intel.
 The configuration files for the cluster are the following:
 ###    - **Configuration files (yaml)**: 
    - **deployment.yaml**: This yaml file contains the configuration to deploy the containers, create the services to each of them and set environments to be used:
-   - ***ServiceAccount***: Since the LLM back_end needs to know the ip address of each service in order to forward the requests.
-   - **Persistent Volume/Claim**:
-   - **Image Containers**:
-   - **Worker assigment**: 
+    - **ServiceAccount***: Since the LLM back_end needs to know the ip address of each service in order to forward the requests.
+    - **Persistent Volume/Claim**:
+    - **Image Containers**:
+    - **Worker assigment**: 
 
    - **efs_storage.**: In this demo we are using amazon EFS as file server. It associates the external File server with the cluster to be used later for the containers.
    Please modify it according to your File server
