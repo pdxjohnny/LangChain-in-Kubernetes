@@ -85,7 +85,18 @@ And finally push it to your repository
 ```
 docker push <username>/front_end:1.0
 ```
-## 4. Set up your kubernetes enviroment
+
+## 4. Download/Optimzize models
+For this example we will be using 3 different types of models. Follow "How to download a model from Hugging Face?" below section in order to download the models.
+
+- **LlaMa2-7b-chat-hf Model** : Follow the instructions to locally download the model from hugging face and store it in your File server, in this demo will see that each local container loads de model from the mounted file server on the container. 
+```
+model_path="/efs_mounted/Models/llama-2-7b-chat-hf"    # Modify it accordly to your file server mount path defined on the deployment.yaml file.
+```
+- **OPTIMIZED : LlaMa2-7b-chat-hf Model** : Follow the Apendix section "How was the optimization done?" to perform the optimization. 
+- **OpenAI API-GPT3.5/4** : API....
+
+## 5. Set up your kubernetes enviroment
 You can deploy your cluster on any cloud provider, or you can visit cloud.intel.com to set up your environment on the latest Intel Xeon or Gaudi generations. Follow this guide to connect to your environment :  https://console.cloud.intel.com/docs/guides/k8s_guide.html.
 
 The configuration files for the cluster are the following:
@@ -103,19 +114,19 @@ The configuration files for the cluster are the following:
 
 #export HTTPS_PROXY=http://proxy-chain.intel.com:912
 
-### 4.1 Install Ngnix
+### 5.1 Install Ngnix
 
 NGNIX....
 ```
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.hostPort.enabled=true
 ```
 
-### 4.2 Deploy services
+### 5.2 Deploy services
 
-### 4.3 Deployment
+### 5.3 Deployment
 This is where you create all the containers and te configuration descripted on the .yaml file
 
-### 4.4 LET'S ACCESS! 
+### 5.4 LET'S ACCESS! 
 The services are exposed to Port:80, for demo purposes we will be forwarding them to our localhost:8000
 ```
 kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
@@ -123,6 +134,10 @@ kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
 Goto http://localhost:8000/
 
 ![Chat](tmp/chat.png)
+
+# Apendix
+
+# How to download a model from Hugging Face?
 
 
 # How was the optimization done?
