@@ -113,7 +113,7 @@ spec:
                 - light_node 
       containers:
       - name: react-frontend
-        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.3
+        image: 902415107800.dkr.ecr.us-east-1.amazonaws.com/front_end:1.4
         ports:
             - name: app-port
               containerPort: 3000
