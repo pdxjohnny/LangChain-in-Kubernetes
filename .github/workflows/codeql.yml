@@ -86,7 +86,7 @@ jobs:
       uses: rsdmike/github-security-report-action@v3.0.4
       with:
         template: report
-        token: ${{ secrets.SECRET.KEYS }}
+        token: ${{ secrets.SECRET_KEY_LANG }}
     - name: GiHub Upload Release Artifacts
       uses:  actions/upload-artifact@v2
       with:
