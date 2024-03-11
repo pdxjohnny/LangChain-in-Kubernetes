@@ -1,0 +1,42 @@
+version: 2
+updates:
+  - package-ecosystem: docker
+    directory: /1__Front_End
+    schedule:
+      interval: daily
+  - package-ecosystem: docker
+    directory: /3__External_Models/OpenAI
+    schedule:
+      interval: daily
+  - package-ecosystem: docker
+    directory: /3__Local_Models/LLAMA-OPT
+    schedule:
+      interval: daily
+  - package-ecosystem: docker
+    directory: /3__Local_Models/LLAMA-non
+    schedule:
+      interval: daily
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+  - package-ecosystem: npm
+    directory: /1__Front_End
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /2__Models_FE
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /3__External_Models/OpenAI
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /3__Local_Models/LLAMA-OPT
+    schedule:
+      interval: daily
+  - package-ecosystem: pip
+    directory: /3__Local_Models/LLAMA-non
+    schedule:
+      interval: daily
