@@ -83,11 +83,13 @@ jobs:
       with:
         category: "/language:${{matrix.language}}"
     - name: Generate Security Report
+      if: github.event_name == 'push'
       uses: rsdmike/github-security-report-action@v3.0.4
       with:
         template: report
         token: ${{ secrets.SECRET_KEY_LANG }}
     - name: GiHub Upload Release Artifacts
+      if: github.event_name == 'push'
       uses:  actions/upload-artifact@v2
       with:
         name: report
