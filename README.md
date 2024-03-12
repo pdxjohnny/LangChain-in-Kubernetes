@@ -148,7 +148,18 @@ This is where you create all the containers and te configuration descripted on t
 kubectl apply -f deployment.yaml
 ```
 
-This commandwill deplouy all pods!
+This command will deplouy all pods!
+
+```
+% kubectl get pods
+NAME                                     READY   STATUS    RESTARTS   AGE
+frontend-7b8d8dd67-pgz8x                 1/1     Running   0          2m50s
+llama7b-non-optimized-86bdbfddd6-f2rh5   1/1     Running   0          2m50s
+llama7b-optimized-549c4fc7fb-djzcj       1/1     Running   0          2m50s
+llms-front-end-8658696b8b-gtsh8          1/1     Running   0          2m50s
+openai-78ffd4d84c-xn69j                  1/1     Running   0          2m50s
+
+```
 
 ### 5.4 LET'S ACCESS! 
 
