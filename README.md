@@ -112,13 +112,13 @@ The configuration files for the cluster are the following:
    --**APIS**
    --**Front_end**
 
-This is how the kubernetes architecture will look like
+This is how the kubernetes architecture will look like.
 
-*NOTE :After you deploy your cluster, you would need to enable 'kubectl' access, since our example used amazon EKS, you can refer to https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html in order to associate kubectl with the cluster prevously created*
+*NOTE :After you deploy your cluster, you would need to enable 'kubectl' access, since our example used amazon EKS, you can refer to https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html in order to associate kubectl with the cluster prevously created and have defined the correct set of permissions*
 
 ### 5.1 Install Ngnix
 
-Once we have access to the cluster, the first step is to create the ingress controller/load balancer. In our example we selected NGNIX.
+Once we have access to the cluster and you've created the worker nodes (In our case we will create 2 nodes, but you can be as granular you can), the first step is to create the ingress controller/load balancer. In our example we selected NGNIX.
 One of the primary uses of NGINX in Kubernetes is as an Ingress controller. Ingress is an API object that manages external access to services within a Kubernetes cluster. An Ingress controller is responsible for fulfilling requests for Ingress resources. NGINX can be configured as an Ingress controller to manage incoming traffic to the cluster, allowing you to route requests to different services based on hostnames, paths, or other rules.
 
 ```
@@ -126,9 +126,29 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 ```
 
 ### 5.2 Deploy services
+In the root folder /LangChain-in-Kubernetes you will find the configuration for ingress
 
-### 5.3 Deployment
+```
+kubectl apply -f ingress.yaml
+```
+This will enable the NGNIX exposse the external communication. In this case is the communication from external users to the front end and due the Front end runs in a browser so the browser should be able to access to the LLMs_Front_end 
+
+### 5.3 Deploy pvc/pv
+This configuration depends on which cluster provider yoiu are using, in our case for AWS EKS, we'd need to enable the CSI controller which will enable EFS to be consumed within the cluster. In order to enable it AWS allows it do add it from the web console. https://github.com/container-storage-interface/spec/blob/master/spec.md
+
+```
+kubectl apply -f efs_storage.yaml
+```
+This will create the pv and pvc in the cluster
+
+### 5.4 Deploy pods
 This is where you create all the containers and te configuration descripted on the .yaml file
+
+```
+kubectl apply -f deployment.yaml
+```
+
+This commandwill deplouy all pods!
 
 ### 5.4 LET'S ACCESS! 
 
