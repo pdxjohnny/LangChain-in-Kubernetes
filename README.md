@@ -112,11 +112,12 @@ The configuration files for the cluster are the following:
    --**APIS**
    --**Front_end**
 
-*NOTE :After you deploy your cluster, you would need to enable 'kubectl' access, since our example used amazon EKS, refer to https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html in order to associate kubectl with the cluster prevously created*
+*NOTE :After you deploy your cluster, you would need to enable 'kubectl' access, since our example used amazon EKS, you can refer to https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html in order to associate kubectl with the cluster prevously created*
 
 ### 5.1 Install Ngnix
 
-NGNIX....
+Once we have access to the cluster, the first step is to create the ingress controller/load balancer. In our example we selected NGNIX.
+One of the primary uses of NGINX in Kubernetes is as an Ingress controller. Ingress is an API object that manages external access to services within a Kubernetes cluster. An Ingress controller is responsible for fulfilling requests for Ingress resources. NGINX can be configured as an Ingress controller to manage incoming traffic to the cluster, allowing you to route requests to different services based on hostnames, paths, or other rules.
 ```
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.hostPort.enabled=true
 ```
@@ -127,6 +128,7 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 This is where you create all the containers and te configuration descripted on the .yaml file
 
 ### 5.4 LET'S ACCESS! 
+
 The services are exposed to Port:80, for demo purposes we will be forwarding them to our localhost:8000
 ```
 kubectl port-forward -n kube-system svc/ingress-nginx-controller 8000:80
