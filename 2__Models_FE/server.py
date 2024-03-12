@@ -111,4 +111,4 @@ async def process_text_data(question: Data,user_agent: str = Header(None)):
 
 if __name__=='__main__':
     import uvicorn
-    uvicorn.run(app, host='0.0.0.0', port=5000)
+    uvicorn.run(app, host='0.0.0.0', port=5000) # nosec B104
