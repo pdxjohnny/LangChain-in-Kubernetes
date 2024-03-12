@@ -112,7 +112,7 @@ The configuration files for the cluster are the following:
    --**APIS**
    --**Front_end**
 
-#export HTTPS_PROXY=http://proxy-chain.intel.com:912
+*NOTE :After you deploy your cluster, you would need to enable 'kubectl' access, since our example used amazon EKS, refer to https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html in order to associate kubectl with the cluster prevously created*
 
 ### 5.1 Install Ngnix
 
