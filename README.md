@@ -137,10 +137,31 @@ Goto http://localhost:8000/
 
 # Apendix
 
-# How to download a model from Hugging Face?
+## How to download a model from Hugging Face?
+Models typically live in Hugging Face, they can all be downloaded in order to perform local inference or to fine tune it. In this demo we will be downloading LLaMa2-7b-chat-hf model.
 
+```
+# Download llama from HF
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# How was the optimization done?
+#Enter your local directory you want to store the model in
+save_path = "Models/Llama-2-7b-chat-hf"
+
+#Specify the model you want to download from HF
+hf_model = 'meta-llama/Llama-2-7b-chat-hf'
+
+#Instantiate the model and tokenizer (It downloads weights/architecture/parameters)
+model = AutoModelForCausalLM.from_pretrained(hf_model, return_dict=True, trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained(hf_model)
+
+#Save the model and the tokenizer in the local directory specified earlier
+model.save_pretrained(save_path)
+tokenizer.save_pretrained(save_path)
+```
+
+Once your model is downloaded it has to be stored in your file server. The file server will be used as a PVC
+
+## How was the optimization done?
 
 We performed a weightonlyoptimization thanks to Intel Extensions for transformers. LlaMa2-7b-hf will be used and this step will help to reduce the size of the model from ~30GB to ~7GB. Thanks to techniques like quantization.
 
@@ -156,7 +177,6 @@ In our case, we will be using a new conda environment (Refer to xxx to install c
 ```
 conda create -n langchain python=3.10
 ```
-
 
 ### 1. Quantize the model
 In order to have a model quantized we need to install ITREX
@@ -184,7 +204,7 @@ Let's perform the quantization!
 The folder has a script (run_generation.py) which downloads the model from HuggingFace(In this case we will be using https://huggingface.co/meta-llama/Llama-2-7b-chat-hf), perform the quantization and saves the model in the same Hugging Face format for future inference.
 
 ```
-python run_generation.py --model meta-llama/Llama-2-7b-hf  --output_dir ./saved_llama     --woq
+python run_generation.py --model meta-llama/Llama-2-7b-chat-hf  --output_dir ./saved_llama     --woq
 
 ```
 We now have the model quantized with the size reduced. It's now ready to be used as you normally use in a Hugging Face Pipeline.
